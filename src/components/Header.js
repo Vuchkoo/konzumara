@@ -15,6 +15,8 @@ import { IconAt, IconShoppingCart } from "@tabler/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cart from "./cart/Cart";
+import SignIn from "./forms/SignIn";
+import SignUp from "./forms/SignUp";
 
 const Header = () => {
   const [cartOpened, setCartOpened] = useState(false);
@@ -38,25 +40,6 @@ const Header = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const onSignInSubmit = (e) => {
-    if (
-      data.user[0].email === form.email &&
-      data.user[0].password === form.password
-    ) {
-      navigate("/user/dashboard");
-    } else {
-      e.preventDefault();
-      alert("Invalid email or password");
-    }
-  };
-
-  // console.log(data.user[0]);
-
-  const onSignUpSubmit = (e) => {
-    e.preventDefault();
-    console.log(form);
   };
 
   return (
@@ -91,34 +74,12 @@ const Header = () => {
         overlayBlur={3}
       >
         {/* Modal content */}
-        <Box sx={{ maxWidth: 300 }} mx="auto">
-          <form onSubmit={onSignInSubmit}>
-            <TextInput
-              name="email"
-              label="Email"
-              onChange={handleChange}
-              rightSection={<IconAt size={14} color="gray" />}
-              placeholder="Email"
-              // {...form.getInputProps("email")}
-              // onChange={(event) => setForms(event.currentTarget.value)}
-            />
-
-            <PasswordInput
-              name="password"
-              mt="md"
-              label="Password"
-              onChange={handleChange}
-              placeholder="Password"
-              // {...form.getInputProps("password")}
-            />
-
-            <Group position="center" mt="md">
-              <Button type="submit" uppercase>
-                Sign in
-              </Button>
-            </Group>
-          </form>
-        </Box>
+        <SignIn
+          data={data}
+          handleChange={handleChange}
+          form={form}
+          navigate={navigate}
+        />
       </Modal>
       <Modal
         opened={signUpOpened}
@@ -134,52 +95,12 @@ const Header = () => {
         overlayBlur={3}
       >
         {/* Modal content */}
-        <Box sx={{ maxWidth: 300 }} mx="auto">
-          <form onSubmit={onSignUpSubmit}>
-            <Flex>
-              <TextInput
-                name="firstName"
-                label="First name"
-                placeholder="Your first name"
-                withAsterisk
-                onChange={handleChange}
-                mr={20}
-              />
-
-              <TextInput
-                name="lastName"
-                label="Last name"
-                placeholder="Your last name"
-                withAsterisk
-                onChange={handleChange}
-              />
-            </Flex>
-
-            <TextInput
-              name="email"
-              label="Email"
-              placeholder="Your email"
-              rightSection={<IconAt size={14} color="gray" />}
-              withAsterisk
-              mt="md"
-              onChange={handleChange}
-            />
-
-            <PasswordInput
-              name="password"
-              label="Password"
-              placeholder="Password"
-              withAsterisk
-              mt="md"
-              onChange={handleChange}
-              // {...form.getInputProps("password")}
-            />
-
-            <Group position="center" mt="md">
-              <Button type="submit">Submit</Button>
-            </Group>
-          </form>
-        </Box>
+        <SignUp
+          data={data}
+          handleChange={handleChange}
+          form={form}
+          navigate={navigate}
+        />
       </Modal>
       <Drawer
         opened={cartOpened}

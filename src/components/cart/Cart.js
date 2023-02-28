@@ -2,8 +2,6 @@ import { Button, Drawer } from "@mantine/core";
 import React, { useState } from "react";
 
 const Cart = () => {
-  const [cartOpened, setCartOpened] = useState(false);
-
   return (
     <>
       <div className="cart-main">
