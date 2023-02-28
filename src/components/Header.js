@@ -14,9 +14,10 @@ import {
 import { IconAt, IconShoppingCart } from "@tabler/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Cart from "./Cart";
+import Cart from "./cart/Cart";
 
 const Header = () => {
+  const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
@@ -180,7 +181,17 @@ const Header = () => {
           </form>
         </Box>
       </Modal>
-      <Cart />
+      <Drawer
+        opened={cartOpened}
+        onClose={() => setCartOpened(false)}
+        title="Cart"
+        padding="xl"
+        size="xl"
+        position="right"
+      >
+        {/* Drawer content */}
+        <Cart />
+      </Drawer>
     </header>
   );
 };

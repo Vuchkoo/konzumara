@@ -5,15 +5,7 @@ const Cart = () => {
   const [cartOpened, setCartOpened] = useState(false);
 
   return (
-    <Drawer
-      opened={cartOpened}
-      onClose={() => setCartOpened(false)}
-      title="Cart"
-      padding="xl"
-      size="xl"
-      position="right"
-    >
-      {/* Drawer content */}
+    <>
       <div className="cart-main">
         <div className="cart-card">
           <div className="cart-item">
@@ -43,7 +35,7 @@ const Cart = () => {
         </div>
         <Button color="green">ORDER</Button>
       </div>
-    </Drawer>
+    </>
   );
 };
 
