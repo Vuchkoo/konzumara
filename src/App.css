@@ -49,3 +49,12 @@
   display: flex;
   justify-content: space-between;
 }
+
+.flex {
+  display: flex;
+}
+
+/* Cart Header */
+.mantine-w29q45 {
+  margin-bottom: 0;
+}
