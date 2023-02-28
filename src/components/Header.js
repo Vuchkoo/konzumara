@@ -6,6 +6,7 @@ import {
   Drawer,
   Flex,
   Group,
+  Indicator,
   Modal,
   PasswordInput,
   TextInput,
@@ -18,7 +19,7 @@ import Cart from "./cart/Cart";
 import SignIn from "./forms/SignIn";
 import SignUp from "./forms/SignUp";
 
-const Header = () => {
+const Header = ({ products, cart }) => {
   const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
@@ -57,7 +58,14 @@ const Header = () => {
           SIGN UP
         </Button>
         <ActionIcon mr={20}>
-          <IconShoppingCart onClick={() => setCartOpened(true)} />
+          <Indicator
+            position="bottom-end"
+            label={cart.length}
+            size={14}
+            showZero={false}
+          >
+            <IconShoppingCart onClick={() => setCartOpened(true)} />
+          </Indicator>
         </ActionIcon>
       </Group>
       <Modal
@@ -105,13 +113,12 @@ const Header = () => {
       <Drawer
         opened={cartOpened}
         onClose={() => setCartOpened(false)}
-        title="Cart"
         padding="xl"
         size="xl"
         position="right"
       >
         {/* Drawer content */}
-        <Cart />
+        <Cart cart={cart} />
       </Drawer>
     </header>
   );
