@@ -1,5 +1,5 @@
 .sidebar {
-  border-right: 1px solid rgb(214, 214, 214);
+  border-right: 1px solid #eeeeee;
   padding-right: 20px;
 }
 
@@ -11,4 +11,41 @@
 
 .product-grid {
   margin-left: 40px;
+}
+
+.cart-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #eeeeee;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.cart-item {
+  display: flex;
+}
+
+.cart-card h3 {
+  font-weight: 400;
+  font-size: 17px;
+}
+
+.cart-main {
+  border-bottom: 1px solid #eeeeee;
+  overflow-y: auto;
+}
+
+.cart-footer h3 {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.cart-footer p {
+  font-size: 14px;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
 }

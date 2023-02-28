@@ -14,9 +14,9 @@ import {
 import { IconAt, IconShoppingCart } from "@tabler/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cart from "./Cart";
 
 const Header = () => {
-  const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
@@ -40,16 +40,23 @@ const Header = () => {
   };
 
   const onSignInSubmit = (e) => {
-    e.preventDefault();
-    navigate("/user/dashboard");
-    console.log(form);
+    if (
+      data.user[0].email === form.email &&
+      data.user[0].password === form.password
+    ) {
+      navigate("/user/dashboard");
+    } else {
+      e.preventDefault();
+      alert("Invalid email or password");
+    }
   };
+
+  // console.log(data.user[0]);
 
   const onSignUpSubmit = (e) => {
     e.preventDefault();
     console.log(form);
   };
-  console.log(data);
 
   return (
     <header>
@@ -105,7 +112,9 @@ const Header = () => {
             />
 
             <Group position="center" mt="md">
-              <Button type="submit">Submit</Button>
+              <Button type="submit" uppercase>
+                Sign in
+              </Button>
             </Group>
           </form>
         </Box>
@@ -171,45 +180,7 @@ const Header = () => {
           </form>
         </Box>
       </Modal>
-      <Drawer
-        opened={cartOpened}
-        onClose={() => setCartOpened(false)}
-        title="Cart"
-        padding="xl"
-        size="xl"
-        position="right"
-      >
-        {/* Drawer content */}
-        <div className="cart-main">
-          <div className="cart-card">
-            <div className="cart-item">
-              <img alt="test" style={{ width: "100px", height: "150px" }} />
-              <div className="item-details">
-                <h3>Title</h3>
-                <p>Description</p>
-                <p>Quantity: ?</p>
-              </div>{" "}
-            </div>
-            <div className="item-quantity">
-              <Button variant="light" compact color="dark" size="xs">
-                x
-              </Button>
-              <h3>$$$</h3>
-              <Button>-</Button>
-              <Button>+</Button>
-            </div>
-          </div>
-        </div>
-        <div className="cart-footer">
-          <div className="price">
-            <h3>SUBTOTAL</h3>
-            <div>
-              <h4>$</h4>
-            </div>
-          </div>
-          <Button color="green">ORDER</Button>
-        </div>
-      </Drawer>
+      <Cart />
     </header>
   );
 };

@@ -1,6 +1,16 @@
 import React from "react";
 import Header from "../../components/user/Header";
-import { Grid, Text, Button, Card, Group } from "@mantine/core";
+import {
+  Grid,
+  Text,
+  Button,
+  Card,
+  Group,
+  Pagination,
+  LoadingOverlay,
+  Loader,
+  Center,
+} from "@mantine/core";
 import Sidebar from "../../components/Sidebar";
 
 const UserDashboard = () => {
@@ -171,6 +181,9 @@ const UserDashboard = () => {
               <Button>Add to cart</Button>
             </Card>
           </Grid>
+          <Center mt={50}>
+            <Button color="green">Load more</Button>
+          </Center>
         </div>
       </div>
     </div>

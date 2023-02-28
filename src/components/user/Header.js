@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   ActionIcon,
+  Avatar,
   Box,
   Button,
   Drawer,
@@ -8,6 +9,7 @@ import {
   Group,
   Modal,
   PasswordInput,
+  Text,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
@@ -38,7 +40,14 @@ const Header = () => {
   return (
     <header>
       <Group position="right">
-        <Button color="green" uppercase onClick={() => navigate("/")}>
+        <Avatar radius="xl" size="md" src={null} color="green" />
+        <Text>test@test.com</Text>
+        <Button
+          color="red"
+          variant="light"
+          uppercase
+          onClick={() => navigate("/")}
+        >
           SIGN OUT
         </Button>
         <ActionIcon mr={20}>

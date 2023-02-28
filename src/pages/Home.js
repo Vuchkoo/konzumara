@@ -1,5 +1,13 @@
 import Header from "../components/Header";
-import { Grid, Text, Button, Card, Group } from "@mantine/core";
+import {
+  Grid,
+  Text,
+  Button,
+  Card,
+  Group,
+  Pagination,
+  Center,
+} from "@mantine/core";
 import Sidebar from "../components/Sidebar";
 
 const Home = () => {
@@ -170,6 +178,9 @@ const Home = () => {
               <Button>Add to cart</Button>
             </Card>
           </Grid>
+          <Center mt={50}>
+            <Button color="green">Load more</Button>
+          </Center>
         </div>
       </div>
     </div>
