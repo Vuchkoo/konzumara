@@ -33,7 +33,7 @@ const Home = () => {
         })
       );
     } else {
-      return setCart([...cart, { ...item }]);
+      return setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
@@ -47,11 +47,32 @@ const Home = () => {
     ]);
   };
 
+  const handleRemoveQuantity = (e, item) => {
+    const itExists = cart.some((cart) => {
+      return cart.id === item.id;
+    });
+    if (itExists) {
+      setCart(
+        cart.map((cart) => {
+          if (cart.id === item.id && cart.quantity > 1) {
+            return { ...cart, quantity: cart.quantity - 1 };
+          }
+          return cart;
+        })
+      );
+    }
+  };
+
   // console.log(cart);
 
   return (
     <div>
-      <Header cart={cart} onRemove={handleRemoveFromCart} />
+      <Header
+        cart={cart}
+        onRemove={handleRemoveFromCart}
+        onAdd={handleAddToCart}
+        onMinus={handleRemoveQuantity}
+      />
       <div className="grid">
         <Sidebar />
         <div className="product-grid">

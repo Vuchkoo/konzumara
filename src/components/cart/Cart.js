@@ -10,7 +10,7 @@ import {
 import { IconShoppingCart } from "@tabler/icons";
 import React from "react";
 
-const Cart = ({ cart, onRemove }) => {
+const Cart = ({ cart, onRemove, onAdd, onMinus }) => {
   // console.log(cart);
   return (
     <>
@@ -51,7 +51,7 @@ const Cart = ({ cart, onRemove }) => {
                   >
                     <Text>{item.title}</Text>
                     <Text>{item.description}</Text>
-                    <Text>Quantity: 1</Text>
+                    <Text>Quantity: {item.quantity}</Text>
                   </Flex>
                 </div>
                 <div className="item-quantity">
@@ -64,9 +64,9 @@ const Cart = ({ cart, onRemove }) => {
                   >
                     x
                   </Button>
-                  <h3>${item.price.toFixed(2)}</h3>
-                  <Button>-</Button>
-                  <Button>+</Button>
+                  <h3>${(item.price * item.quantity).toFixed(2)}</h3>
+                  <Button onClick={(e) => onMinus(e, item)}>-</Button>
+                  <Button onClick={(e) => onAdd(e, item)}>+</Button>
                 </div>
               </div>
             );
@@ -81,7 +81,7 @@ const Cart = ({ cart, onRemove }) => {
               $
               {cart
                 .reduce((acc, cart) => {
-                  return cart.price + acc;
+                  return cart.quantity * cart.price + acc;
                 }, 0)
                 .toFixed(2)}
             </h4>
