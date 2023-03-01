@@ -10,7 +10,7 @@ import {
 import { IconShoppingCart } from "@tabler/icons";
 import React from "react";
 
-const Cart = ({ cart }) => {
+const Cart = ({ cart, onRemove }) => {
   // console.log(cart);
   return (
     <>
@@ -55,7 +55,13 @@ const Cart = ({ cart }) => {
                   </Flex>
                 </div>
                 <div className="item-quantity">
-                  <Button variant="light" compact color="dark" size="xs">
+                  <Button
+                    variant="light"
+                    compact
+                    color="dark"
+                    size="xs"
+                    onClick={(e) => onRemove(e, item.id)}
+                  >
                     x
                   </Button>
                   <h3>${item.price.toFixed(2)}</h3>

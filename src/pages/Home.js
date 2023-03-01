@@ -37,11 +37,21 @@ const Home = () => {
     }
   };
 
+  const handleRemoveFromCart = (e, id) => {
+    setCart([
+      ...cart.filter((item) => {
+        if (item.id !== id) {
+          return item;
+        }
+      }),
+    ]);
+  };
+
   // console.log(cart);
 
   return (
     <div>
-      <Header cart={cart} />
+      <Header cart={cart} onRemove={handleRemoveFromCart} />
       <div className="grid">
         <Sidebar />
         <div className="product-grid">

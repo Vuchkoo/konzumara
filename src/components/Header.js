@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from "react";
 import {
   ActionIcon,
-  Box,
   Button,
   Drawer,
-  Flex,
   Group,
   Indicator,
   Modal,
-  PasswordInput,
-  TextInput,
   useMantineTheme,
 } from "@mantine/core";
-import { IconAt, IconShoppingCart } from "@tabler/icons";
+import { IconShoppingCart } from "@tabler/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cart from "./cart/Cart";
 import SignIn from "./forms/SignIn";
 import SignUp from "./forms/SignUp";
 
-const Header = ({ products, cart }) => {
+const Header = ({ cart, onRemove }) => {
   const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
@@ -63,8 +59,9 @@ const Header = ({ products, cart }) => {
             label={cart.length}
             size={14}
             showZero={false}
+            onClick={() => setCartOpened(true)}
           >
-            <IconShoppingCart onClick={() => setCartOpened(true)} />
+            <IconShoppingCart />
           </Indicator>
         </ActionIcon>
       </Group>
@@ -118,7 +115,7 @@ const Header = ({ products, cart }) => {
         position="right"
       >
         {/* Drawer content */}
-        <Cart cart={cart} />
+        <Cart cart={cart} onRemove={onRemove} />
       </Drawer>
     </header>
   );
