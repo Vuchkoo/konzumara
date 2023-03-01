@@ -7,7 +7,7 @@ import {
   IconCategory2,
 } from "@tabler/icons";
 import { useStyles } from "../Styles";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const NavbarSimple = () => {
   const [active, setActive] = useState("");
@@ -22,7 +22,7 @@ export const NavbarSimple = () => {
 
   const handleSignOut = (e) => {
     e.preventDefault();
-    navigate("/");
+    navigate("/admin");
   };
 
   return (
@@ -38,9 +38,10 @@ export const NavbarSimple = () => {
             })}
             href={item.link}
             key={item.label}
-            onClick={(event) => {
-              event.preventDefault();
+            onClick={(e) => {
+              e.preventDefault();
               setActive(item.label);
+              navigate(`/admin/${item.label.toLowerCase()}`);
             }}
           >
             <item.icon className={classes.linkIcon} stroke={1.5} />
