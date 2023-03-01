@@ -1,15 +1,13 @@
 import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { IconAt } from "@tabler/icons";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
-const SignIn = ({ data, form, navigate, handleChange }) => {
+const SignIn = ({ data, form, handleChange, setUser, setSignInOpened }) => {
   const onSignInSubmit = (e) => {
-    if (
-      data.user[0].email === form.email &&
-      data.user[0].password === form.password
-    ) {
-      navigate("/user/dashboard");
+    if (data[0].email === form.email && data[0].password === form.password) {
+      e.preventDefault();
+      setUser(true);
+      setSignInOpened(false);
     } else {
       e.preventDefault();
       alert("Invalid email or password");
@@ -25,8 +23,6 @@ const SignIn = ({ data, form, navigate, handleChange }) => {
           onChange={handleChange}
           rightSection={<IconAt size={14} color="gray" />}
           placeholder="Email"
-          // {...form.getInputProps("email")}
-          // onChange={(event) => setForms(event.currentTarget.value)}
         />
 
         <PasswordInput
@@ -35,7 +31,6 @@ const SignIn = ({ data, form, navigate, handleChange }) => {
           label="Password"
           onChange={handleChange}
           placeholder="Password"
-          // {...form.getInputProps("password")}
         />
 
         <Group position="center" mt="md">

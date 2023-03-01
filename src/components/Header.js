@@ -31,7 +31,7 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
   useEffect(() => {
     axios(`/user.json`)
       .then((res) => {
-        setUser(res.data.user);
+        setData(res.data.user);
       })
       .catch((err) => {
         console.log(err);
@@ -42,11 +42,9 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  console.log(user);
-
   return (
     <header>
-      {!data ? (
+      {!user ? (
         <Group position="right">
           <Button color="green" uppercase onClick={() => setSignInOpened(true)}>
             SIGN IN
@@ -79,7 +77,7 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
             color="red"
             variant="light"
             uppercase
-            onClick={() => setData(false)}
+            onClick={() => setUser(false)}
           >
             SIGN OUT
           </Button>
@@ -111,11 +109,11 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
       >
         {/* Modal content */}
         <SignIn
-          user={user}
+          data={data}
           handleChange={handleChange}
           form={form}
           navigate={navigate}
-          setData={setData}
+          setUser={setUser}
           setSignInOpened={setSignInOpened}
         />
       </Modal>
@@ -134,7 +132,7 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
       >
         {/* Modal content */}
         <SignUp
-          user={user}
+          data={data}
           handleChange={handleChange}
           form={form}
           navigate={navigate}
