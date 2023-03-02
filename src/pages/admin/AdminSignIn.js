@@ -33,7 +33,7 @@ const AdminSignIn = () => {
   const onSignInSubmit = (e) => {
     if (data[1].email === form.email && data[1].password === form.password) {
       e.preventDefault();
-      navigate("dashboard");
+      navigate("products");
     } else {
       e.preventDefault();
       alert("Invalid email or password");
