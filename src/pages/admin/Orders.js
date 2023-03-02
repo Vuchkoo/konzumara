@@ -1,4 +1,4 @@
-import { Button, Flex, TextInput } from "@mantine/core";
+import { Flex, TextInput } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
 import React from "react";
 import { NavbarSimple } from "../../components/admin/Navbar";
@@ -14,9 +14,9 @@ const Orders = () => {
             placeholder="Search orders"
             icon={<IconSearch />}
           />
-          <Button color="green" mr={50}>
+          {/* <Button color="green" mr={50}>
             Create
-          </Button>
+          </Button> */}
         </Flex>
         <div className="orders">
           <h2>Orders</h2>
