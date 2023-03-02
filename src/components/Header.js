@@ -22,8 +22,8 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
-  const [user, setUser] = useState();
-  const [data, setData] = useState(false);
+  const [user, setUser] = useState(false);
+  const [data, setData] = useState();
 
   const navigate = useNavigate();
   const theme = useMantineTheme();
