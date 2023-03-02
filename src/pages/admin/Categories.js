@@ -1,8 +1,10 @@
 import {
   ActionIcon,
   Button,
+  Center,
   Flex,
   Modal,
+  Pagination,
   ScrollArea,
   Table,
   Text,
@@ -12,6 +14,7 @@ import {
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
 import EditCategories from "../../components/forms/EditCategories";
 
@@ -20,6 +23,7 @@ const Categories = () => {
   const [form, setForm] = useState();
   const [editOpened, setEditOpened] = useState(false);
 
+  const navigate = useNavigate();
   const theme = useMantineTheme();
 
   useEffect(() => {
@@ -56,7 +60,7 @@ const Categories = () => {
             placeholder="Search categories"
             icon={<IconSearch />}
           />
-          <Button color="green" mr={50}>
+          <Button color="green" mr={50} onClick={() => navigate("create")}>
             Create
           </Button>
         </Flex>
@@ -98,6 +102,9 @@ const Categories = () => {
               </tbody>
             </Table>
           </ScrollArea>
+          <Center>
+            <Pagination total={10} />
+          </Center>{" "}
         </div>
         <Modal
           opened={editOpened}
