@@ -2,20 +2,26 @@ import {
   ActionIcon,
   Button,
   Flex,
-  Group,
   Image,
+  Modal,
   ScrollArea,
   Table,
   Text,
   TextInput,
+  useMantineTheme,
 } from "@mantine/core";
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NavbarSimple } from "../../components/admin/Navbar";
+import EditProduct from "../../components/forms/EditProduct";
 
 const Products = () => {
   const [products, setProducts] = useState();
+  const [form, setForm] = useState();
+  const [editOpened, setEditOpened] = useState(false);
+
+  const theme = useMantineTheme();
 
   useEffect(() => {
     axios(`/product.json`)
@@ -26,6 +32,20 @@ const Products = () => {
         console.log(err);
       });
   }, []);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleRemoveFromCart = (e, id) => {
+    setProducts([
+      ...products.filter((item) => {
+        if (item.id !== id) {
+          return item;
+        }
+      }),
+    ]);
+  };
 
   return (
     <div className="grid">
@@ -81,10 +101,17 @@ const Products = () => {
                       </td>
                       <td>
                         <Flex>
-                          <ActionIcon color="yellow">
+                          <ActionIcon
+                            color="yellow"
+                            onClick={() => setEditOpened(true)}
+                          >
                             <IconEdit />
                           </ActionIcon>
-                          <ActionIcon ml={10} color="red">
+                          <ActionIcon
+                            ml={10}
+                            color="red"
+                            onClick={(e) => handleRemoveFromCart(e, item.id)}
+                          >
                             <IconTrash />
                           </ActionIcon>
                         </Flex>
@@ -96,6 +123,22 @@ const Products = () => {
             </Table>
           </ScrollArea>
         </div>
+        <Modal
+          opened={editOpened}
+          onClose={() => setEditOpened(false)}
+          title="Edit product"
+          centered
+          overlayColor={
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[9]
+              : theme.colors.gray[2]
+          }
+          overlayOpacity={0.55}
+          overlayBlur={3}
+        >
+          {/* Modal content */}
+          <EditProduct onChange={handleChange} />
+        </Modal>
       </div>
     </div>
   );
