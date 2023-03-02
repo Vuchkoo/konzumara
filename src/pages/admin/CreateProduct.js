@@ -1,9 +1,26 @@
-import { Box, Button, Center, Group, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Center,
+  Group,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { IconArrowBackUp } from "@tabler/icons";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateProduct = ({ onChange }) => {
+  const navigate = useNavigate();
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
+      <Group>
+        <ActionIcon color="blue" onClick={() => navigate("/admin/products")}>
+          <IconArrowBackUp />
+        </ActionIcon>
+        <Text>Go back</Text>
+      </Group>
       <Center>
         <h2>Create a new product</h2>
       </Center>

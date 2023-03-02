@@ -18,12 +18,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
 import EditProduct from "../../components/forms/EditProduct";
+import { useStyles } from "../../components/Styles";
 
 const Products = () => {
   const [products, setProducts] = useState();
   const [form, setForm] = useState();
   const [editOpened, setEditOpened] = useState(false);
 
+  const { classes } = useStyles();
   const navigate = useNavigate();
   const theme = useMantineTheme();
 
