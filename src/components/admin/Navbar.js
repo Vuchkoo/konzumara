@@ -26,38 +26,40 @@ export const NavbarSimple = () => {
   };
 
   return (
-    <Navbar height={700} width={{ sm: 300 }} p="md">
-      <Navbar.Section grow>
-        <Group className={classes.header} position="apart">
-          <h1>Konzumara</h1>
-        </Group>
-        {navLinks.map((item) => (
-          <a
-            className={cx(classes.link, {
-              [classes.linkActive]: item.label === active,
-            })}
-            href={item.link}
-            key={item.label}
-            onClick={(e) => {
-              e.preventDefault();
-              setActive(item.label);
-              navigate(`/admin/${item.label.toLowerCase()}`);
-            }}
-          >
-            <item.icon className={classes.linkIcon} stroke={1.5} />
-            <span>{item.label}</span>
-          </a>
-        ))}
-      </Navbar.Section>
+    <div className="navbar">
+      <Navbar width={{ sm: 300 }} p="lg">
+        <Navbar.Section grow>
+          <Group className={classes.header} position="apart">
+            <h1>Konzumara</h1>
+          </Group>
+          {navLinks.map((item) => (
+            <a
+              className={cx(classes.link, {
+                [classes.linkActive]: item.label === active,
+              })}
+              href={item.link}
+              key={item.label}
+              onClick={(e) => {
+                e.preventDefault();
+                setActive(item.label);
+                navigate(`/admin/${item.label.toLowerCase()}`);
+              }}
+            >
+              <item.icon className={classes.linkIcon} stroke={1.5} />
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </Navbar.Section>
 
-      <Navbar.Section className={classes.footer}>
-        <Center>
-          <a href="#" className={classes.link} onClick={handleSignOut}>
-            <IconLogout className={classes.linkIcon} stroke={1.5} />
-            <span>Sign Out</span>
-          </a>
-        </Center>
-      </Navbar.Section>
-    </Navbar>
+        <Navbar.Section className={classes.footer}>
+          <Center>
+            <a href="#" className={classes.link} onClick={handleSignOut}>
+              <IconLogout className={classes.linkIcon} stroke={1.5} />
+              <span>Sign Out</span>
+            </a>
+          </Center>
+        </Navbar.Section>
+      </Navbar>
+    </div>
   );
 };
