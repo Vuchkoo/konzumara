@@ -37,7 +37,7 @@ const Products = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleRemoveFromCart = (e, id) => {
+  const handleRemoveProduct = (e, id) => {
     setProducts([
       ...products.filter((item) => {
         if (item.id !== id) {
@@ -110,7 +110,7 @@ const Products = () => {
                           <ActionIcon
                             ml={10}
                             color="red"
-                            onClick={(e) => handleRemoveFromCart(e, item.id)}
+                            onClick={(e) => handleRemoveProduct(e, item.id)}
                           >
                             <IconTrash />
                           </ActionIcon>
