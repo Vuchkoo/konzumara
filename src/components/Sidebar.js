@@ -3,16 +3,17 @@ import { IconSearch } from "@tabler/icons";
 import React from "react";
 import { useStyles } from "./Styles";
 
-const Sidebar = () => {
-  const { classes, cx } = useStyles();
-  //   const [active, setActive] = useState("Billing");
+const Sidebar = ({ onEnter, onChange }) => {
+  const { classes } = useStyles();
+
   const data = [
     { label: "Example 1", value: "example1" },
     { label: "Example 2", value: "example2" },
     { label: "Example 3", value: "example3" },
   ];
+
   const categories = data.map((item) => (
-    <Radio label={item.label} value={item.value} mb="sm" />
+    <Radio key={item.label} label={item.label} value={item.value} mb="sm" />
   ));
 
   return (
@@ -22,8 +23,11 @@ const Sidebar = () => {
       </Group>
       <TextInput
         label="Search"
+        name="search"
         placeholder="Search products"
         icon={<IconSearch />}
+        onChange={onChange}
+        onKeyDown={onEnter}
       />
       <Radio.Group mt={20} label="Categories" name="categories">
         <Flex direction="column" mb>
