@@ -1,41 +1,38 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Group,
-  PasswordInput,
-  TextInput,
-} from "@mantine/core";
+import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { IconAt } from "@tabler/icons";
 import React from "react";
+import { supabase } from "../../config/Supabase";
 
-const SignUp = ({ data, form, handleChange }) => {
-  const onSignUpSubmit = (e) => {
-    e.preventDefault();
-    console.log(form);
+const SignUp = ({ form, handleChange, setSignInOpened, setSignUpOpened }) => {
+  const { fullName, email, password } = form.values;
+
+  const handleSignUp = async () => {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          full_name: fullName,
+        },
+      },
+    });
+    setSignUpOpened(false);
+    setSignInOpened(true);
   };
 
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
-      <form onSubmit={onSignUpSubmit}>
-        <Flex>
-          <TextInput
-            name="firstName"
-            label="First name"
-            placeholder="Your first name"
-            withAsterisk
-            onChange={handleChange}
-            mr={20}
-          />
-
-          <TextInput
-            name="lastName"
-            label="Last name"
-            placeholder="Your last name"
-            withAsterisk
-            onChange={handleChange}
-          />
-        </Flex>
+      <form onSubmit={form.onSubmit(handleSignUp)}>
+        <TextInput
+          name="fullName"
+          label="Full name"
+          placeholder="Your full name"
+          withAsterisk
+          onChange={handleChange}
+          mr={20}
+          style={{ width: 300 }}
+          // {...form.getInputProps("fullName")}
+        />
 
         <TextInput
           name="email"
@@ -45,6 +42,7 @@ const SignUp = ({ data, form, handleChange }) => {
           withAsterisk
           mt="md"
           onChange={handleChange}
+          // {...form.getInputProps("email")}
         />
 
         <PasswordInput
@@ -54,6 +52,7 @@ const SignUp = ({ data, form, handleChange }) => {
           withAsterisk
           mt="md"
           onChange={handleChange}
+          // // {...form.getInputProps("password")}
           // {...form.getInputProps("password")}
         />
 
