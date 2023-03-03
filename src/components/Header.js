@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ActionIcon,
   Avatar,
@@ -17,21 +17,28 @@ import Cart from "./cart/Cart";
 import SignIn from "./forms/SignIn";
 import SignUp from "./forms/SignUp";
 import { Context } from "../context/Context";
+import { useForm } from "@mantine/form";
 
 const Header = ({ cart, onRemove, onAdd, onMinus }) => {
   const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
-  const [form, setForm] = useState({ email: "", password: "" });
+  // const [form, setForm] = useState({ email: "", password: "" });
   const [roleUser, setRoleUser] = useState(false);
   const [data, setData] = useState();
   const { user, setUser } = useContext(Context);
 
   const navigate = useNavigate();
   const theme = useMantineTheme();
+  const form = useForm({
+    fullName: "",
+    email: "",
+    password: "",
+  });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    form.setValues({ ...form, [e.target.name]: e.target.value });
+    console.log(form.values);
   };
 
   return (
@@ -106,7 +113,6 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
           form={form}
           navigate={navigate}
           setUser={setUser}
-          setSignInOpened={setSignInOpened}
         />
       </Modal>
       <Modal
@@ -128,6 +134,8 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
           handleChange={handleChange}
           form={form}
           navigate={navigate}
+          setSignInOpened={setSignInOpened}
+          setSignUpOpened={setSignUpOpened}
         />
       </Modal>
       <Drawer
