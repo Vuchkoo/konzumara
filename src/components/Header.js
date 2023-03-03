@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ActionIcon,
   Avatar,
@@ -16,27 +16,19 @@ import { useNavigate } from "react-router-dom";
 import Cart from "./cart/Cart";
 import SignIn from "./forms/SignIn";
 import SignUp from "./forms/SignUp";
+import { Context } from "../context/Context";
 
 const Header = ({ cart, onRemove, onAdd, onMinus }) => {
   const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
-  const [user, setUser] = useState(false);
+  const [roleUser, setRoleUser] = useState(false);
   const [data, setData] = useState();
+  const { user, setUser } = useContext(Context);
 
   const navigate = useNavigate();
   const theme = useMantineTheme();
-
-  useEffect(() => {
-    axios(`/user.json`)
-      .then((res) => {
-        setData(res.data.user);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,7 +36,7 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
 
   return (
     <header>
-      {!user ? (
+      {!roleUser ? (
         <Group position="right">
           <Button color="green" uppercase onClick={() => setSignInOpened(true)}>
             SIGN IN

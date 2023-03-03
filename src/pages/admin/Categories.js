@@ -12,29 +12,19 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
 import EditCategories from "../../components/forms/EditCategories";
+import { Context } from "../../context/Context";
 
 const Categories = () => {
-  const [products, setProducts] = useState();
   const [form, setForm] = useState();
   const [editOpened, setEditOpened] = useState(false);
+  const { user, setUser, products, setProducts } = useContext(Context);
 
   const navigate = useNavigate();
   const theme = useMantineTheme();
-
-  useEffect(() => {
-    axios(`/product.json`)
-      .then((res) => {
-        setProducts(res.data.product);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

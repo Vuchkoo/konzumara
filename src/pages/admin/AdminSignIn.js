@@ -7,31 +7,21 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconAt } from "@tabler/icons";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Context } from "../../context/Context";
 
 const AdminSignIn = () => {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [data, setData] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    axios(`/user.json`)
-      .then((res) => {
-        setData(res.data.user);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const { user, setUser } = useContext(Context);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const onSignInSubmit = (e) => {
-    if (data[1].email === form.email && data[1].password === form.password) {
+    if (user[1].email === form.email && user[1].password === form.password) {
       e.preventDefault();
       navigate("products");
     } else {
