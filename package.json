@@ -16,6 +16,7 @@
     "@mantine/prism": "^5.10.5",
     "@mantine/spotlight": "^5.10.5",
     "@mantine/tiptap": "^5.10.5",
+    "@supabase/supabase-js": "^2.10.0",
     "@tabler/icons": "^1.119.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
