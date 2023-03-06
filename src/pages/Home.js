@@ -84,7 +84,7 @@ const Home = () => {
             {products?.map((item) => {
               return (
                 <ProductCard
-                  key={item.title}
+                  key={item.name}
                   item={item}
                   onAdd={handleAddToCart}
                 />

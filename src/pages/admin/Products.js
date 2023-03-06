@@ -12,6 +12,7 @@ import {
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,17 +21,10 @@ import EditProduct from "../../components/forms/EditProduct";
 import { Context } from "../../context/Context";
 
 const Products = () => {
-  const [form, setForm] = useState();
   const [editOpened, setEditOpened] = useState(false);
   const { products, setProducts } = useContext(Context);
-
   const navigate = useNavigate();
   const theme = useMantineTheme();
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form);
-  };
 
   const handleRemoveProduct = (e, id) => {
     setProducts([
@@ -67,15 +61,16 @@ const Products = () => {
               <thead>
                 <tr>
                   <th>Image</th>
-                  <th>Title</th>
+                  <th>Name</th>
                   <th>Description</th>
                   <th>Price</th>
+                  <th>Quantity</th>
                 </tr>
               </thead>
               <tbody>
                 {products?.map((item) => {
                   return (
-                    <tr key={item.title}>
+                    <tr key={item.id}>
                       <td>
                         <Image
                           src={item.image}
@@ -86,13 +81,16 @@ const Products = () => {
                         />
                       </td>
                       <td>
-                        <Text>{item.title}</Text>
+                        <Text>{item.name}</Text>
                       </td>
                       <td>
                         <Text>{item.description}</Text>
                       </td>
                       <td>
                         <Text>${item.price.toFixed(2)}</Text>
+                      </td>
+                      <td>
+                        <Text>{item.quantity}</Text>
                       </td>
                       <td>
                         <Flex>
@@ -135,7 +133,7 @@ const Products = () => {
           overlayBlur={3}
         >
           {/* Modal content */}
-          <EditProduct onChange={handleChange} />
+          <EditProduct />
         </Modal>
       </div>
     </div>

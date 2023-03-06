@@ -13,9 +13,9 @@ const ProductCard = ({ item, onAdd }) => {
         />
         <Flex direction="column" justify="center" align="center">
           <Text mt={10} weight={500}>
-            {item.title}
+            {item.name}
           </Text>
-          <Text size="xs" color="dimmed">
+          <Text size={10} color="dimmed">
             {item.description}
           </Text>
           <Text size="xl" weight={700}>

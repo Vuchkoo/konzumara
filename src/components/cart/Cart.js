@@ -35,11 +35,11 @@ const Cart = ({ cart, onRemove, onAdd, onMinus }) => {
         <div className="cart-main">
           {cart.map((item) => {
             return (
-              <div className="cart-card">
+              <div key={item.name} className="cart-card">
                 <div className="cart-item">
                   <Image
                     src={item.image}
-                    alt="item.title"
+                    alt={item.name}
                     radius="md"
                     width={80}
                     height={100}
@@ -49,7 +49,7 @@ const Cart = ({ cart, onRemove, onAdd, onMinus }) => {
                     justify="center"
                     className="item-details"
                   >
-                    <Text>{item.title}</Text>
+                    <Text>{item.name}</Text>
                     <Text>{item.description}</Text>
                     <Text>Quantity: {item.quantity}</Text>
                   </Flex>

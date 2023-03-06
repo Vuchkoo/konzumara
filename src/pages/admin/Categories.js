@@ -21,7 +21,8 @@ import { Context } from "../../context/Context";
 const Categories = () => {
   const [form, setForm] = useState();
   const [editOpened, setEditOpened] = useState(false);
-  const { user, setUser, products, setProducts } = useContext(Context);
+  const { user, setUser, products, setProducts, categories, setCategories } =
+    useContext(Context);
 
   const navigate = useNavigate();
   const theme = useMantineTheme();
@@ -63,11 +64,11 @@ const Categories = () => {
           >
             <Table>
               <tbody>
-                {products?.map((item) => {
+                {categories.map((item) => {
                   return (
-                    <tr key={item.title}>
+                    <tr key={item.id}>
                       <td>
-                        <Text>{item.description}</Text>
+                        <Text>{item.name}</Text>
                       </td>
                       <td>
                         <Flex>
