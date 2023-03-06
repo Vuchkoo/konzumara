@@ -20,23 +20,6 @@ export const DataProvider = ({ children }) => {
     setLoading,
   };
 
-  // useEffect(() => {
-  //   axios(`/product.json`)
-  //     .then((res) => {
-  //       setProducts(res.data.product);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   axios(`/user.json`)
-  //     .then((res) => {
-  //       setUser(res.data.user);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
-
   useEffect(() => {
     const getProducts = async () => {
       const { data, error } = await supabase.from("products").select();
