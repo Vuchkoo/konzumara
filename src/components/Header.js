@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   ActionIcon,
   Avatar,
@@ -11,22 +11,19 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IconShoppingCart } from "@tabler/icons";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cart from "./cart/Cart";
 import SignIn from "./forms/SignIn";
 import SignUp from "./forms/SignUp";
-import { Context } from "../context/Context";
 import { useForm } from "@mantine/form";
+import { supabase } from "../config/Supabase";
 
 const Header = ({ cart, onRemove, onAdd, onMinus }) => {
   const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
-  // const [form, setForm] = useState({ email: "", password: "" });
-  const [roleUser, setRoleUser] = useState(false);
+  const [user, setUser] = useState();
   const [data, setData] = useState();
-  const { user, setUser } = useContext(Context);
 
   const navigate = useNavigate();
   const theme = useMantineTheme();
@@ -42,9 +39,15 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
     console.log(form.values);
   };
 
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    setUser();
+    alert("Successfully signed out!");
+  };
+
   return (
     <header>
-      {!roleUser ? (
+      {!user ? (
         <Group position="right">
           <Button color="green" uppercase onClick={() => setSignInOpened(true)}>
             SIGN IN
@@ -72,13 +75,8 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
       ) : (
         <Group position="right">
           <Avatar radius="xl" size="md" src={null} color="green" />
-          <Text>test@test.com</Text>
-          <Button
-            color="red"
-            variant="light"
-            uppercase
-            onClick={() => setUser(false)}
-          >
+          <Text>{user.email}</Text>
+          <Button color="red" variant="light" uppercase onClick={handleSignOut}>
             SIGN OUT
           </Button>
           <ActionIcon mr={20}>
@@ -113,6 +111,8 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
           handleChange={handleChange}
           form={form}
           navigate={navigate}
+          setSignInOpened={setSignInOpened}
+          user={user}
           setUser={setUser}
         />
       </Modal>
