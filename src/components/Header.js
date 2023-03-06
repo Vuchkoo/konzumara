@@ -34,6 +34,7 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
     fullName: "",
     email: "",
     password: "",
+    role: "",
   });
 
   const handleChange = (e) => {

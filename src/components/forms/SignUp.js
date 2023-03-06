@@ -1,10 +1,24 @@
-import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Group,
+  PasswordInput,
+  TextInput,
+} from "@mantine/core";
 import { IconAt } from "@tabler/icons";
-import React from "react";
+import React, { useState } from "react";
 import { supabase } from "../../config/Supabase";
 
-const SignUp = ({ form, handleChange, setSignInOpened, setSignUpOpened }) => {
-  const { fullName, email, password } = form.values;
+const SignUp = ({
+  form,
+  handleChange,
+  setSignInOpened,
+  setSignUpOpened,
+  navigate,
+}) => {
+  const { fullName, email, password, role } = form.values;
+  const [checked, setChecked] = useState(false);
 
   const handleSignUp = async () => {
     const { data, error } = await supabase.auth.signUp({
@@ -13,11 +27,17 @@ const SignUp = ({ form, handleChange, setSignInOpened, setSignUpOpened }) => {
       options: {
         data: {
           full_name: fullName,
+          role: checked ? "admin" : "user",
         },
       },
     });
-    setSignUpOpened(false);
-    setSignInOpened(true);
+    console.log(data);
+    if (checked) {
+      navigate("/admin");
+    } else {
+      setSignUpOpened(false);
+      setSignInOpened(true);
+    }
   };
 
   return (
@@ -52,8 +72,14 @@ const SignUp = ({ form, handleChange, setSignInOpened, setSignUpOpened }) => {
           withAsterisk
           mt="md"
           onChange={handleChange}
-          // // {...form.getInputProps("password")}
           // {...form.getInputProps("password")}
+        />
+
+        <Checkbox
+          name="checkbox"
+          label="is Admin"
+          mt="md"
+          onChange={() => (checked ? setChecked(false) : setChecked(true))}
         />
 
         <Group position="center" mt="md">
