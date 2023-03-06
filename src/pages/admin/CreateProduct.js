@@ -3,16 +3,61 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   Group,
+  NativeSelect,
+  NumberInput,
   Text,
   TextInput,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconArrowBackUp } from "@tabler/icons";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../config/Supabase";
+import { Context } from "../../context/Context";
 
-const CreateProduct = ({ onChange }) => {
+const CreateProduct = () => {
   const navigate = useNavigate();
+  const form = useForm({
+    initialValues: {
+      name: "",
+      description: "",
+      price: undefined,
+      is_sale: undefined,
+      sale_price: undefined,
+      image: undefined,
+      quantity: undefined,
+      category_id: undefined,
+    },
+  });
+
+  const {
+    name,
+    description,
+    price,
+    is_sale,
+    sale_price,
+    image,
+    quantity,
+    category_id,
+  } = form.values;
+  const { categories, setCategories } = useContext(Context);
+
+  const createNewProduct = async () => {
+    const { error } = await supabase.from("products").insert({
+      name: name,
+      description: description,
+      price: price,
+      is_sale: is_sale,
+      sale_price: sale_price,
+      image: image,
+      quantity: quantity,
+      category_id: category_id,
+    });
+    navigate("/admin/products");
+  };
+
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
       <Group>
@@ -24,37 +69,64 @@ const CreateProduct = ({ onChange }) => {
       <Center>
         <h2>Create a new product</h2>
       </Center>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={form.onSubmit(createNewProduct)}>
         <TextInput
-          name="image"
           mt="md"
           label="Image URL"
-          onChange={onChange}
+          {...form.getInputProps("image")}
           placeholder="Image URL"
         />
 
         <TextInput
-          name="name"
           mt="md"
           label="Name"
-          onChange={onChange}
+          {...form.getInputProps("name")}
           placeholder="Name"
         />
 
         <TextInput
-          name="category"
           mt="md"
-          label="Category"
-          onChange={onChange}
-          placeholder="Category"
+          label="Description"
+          {...form.getInputProps("description")}
+          placeholder="Description"
         />
 
-        <TextInput
-          name="price"
+        <NativeSelect
+          data={categories?.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
+          mt="md"
+          label="Category"
+          onClick={() => console.log(form.values)}
+          {...form.getInputProps("category_id")}
+        />
+
+        <NumberInput
           mt="md"
           label="Price"
-          onChange={onChange}
+          {...form.getInputProps("price", { type: "number" })}
           placeholder="Price"
+        />
+
+        <NumberInput
+          mt="md"
+          label="Quantity"
+          {...form.getInputProps("quantity", { type: "number" })}
+          placeholder="Quantity"
+        />
+
+        <NumberInput
+          mt="md"
+          label="Sale price"
+          {...form.getInputProps("sale_price", { type: "number" })}
+          placeholder="Sale price"
+        />
+
+        <Checkbox
+          label="is Sale"
+          mt="md"
+          // onChange={() => (checked ? setChecked(false) : setChecked(true))}
         />
 
         <Group position="center" mt="md">
