@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { supabase } from "../../config/Supabase";
 
 // const SignIn = ({ data, form, handleChange, setUser, setSignInOpened }) => {
-const SignIn = ({ form, handleChange, setSignInOpened, user, setUser }) => {
+const SignIn = ({ form, setSignInOpened, setUser }) => {
   const { email, password } = form.values;
 
   const handleSignIn = async (e) => {
@@ -22,34 +22,21 @@ const SignIn = ({ form, handleChange, setSignInOpened, user, setUser }) => {
     }
   };
 
-  // const onSignInSubmit = (e) => {
-  //   if (data[0].email === form.email && data[0].password === form.password) {
-  //     e.preventDefault();
-  //     setUser(true);
-  //     setSignInOpened(false);
-  //   } else {
-  //     e.preventDefault();
-  //     alert("Invalid email or password");
-  //   }
-  // };
-
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
       <form onSubmit={handleSignIn}>
         <TextInput
-          name="email"
           label="Email"
-          onChange={handleChange}
           rightSection={<IconAt size={14} color="gray" />}
           placeholder="Email"
+          {...form.getInputProps("email")}
         />
 
         <PasswordInput
-          name="password"
           mt="md"
           label="Password"
-          onChange={handleChange}
           placeholder="Password"
+          {...form.getInputProps("password")}
         />
 
         <Group position="center" mt="md">

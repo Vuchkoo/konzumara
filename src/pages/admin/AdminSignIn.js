@@ -6,27 +6,31 @@ import {
   PasswordInput,
   TextInput,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconAt } from "@tabler/icons";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const AdminSignIn = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const { user, setUser } = useContext(Context);
+  const form = useForm({ initialValues: { email: "", password: "" } });
+  const { email, password } = form.values;
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const onSignInSubmit = (e) => {
-    if (user[1].email === form.email && user[1].password === form.password) {
-      e.preventDefault();
-      navigate("products");
-    } else {
-      e.preventDefault();
+  const onSignInSubmit = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    if (error) {
       alert("Invalid email or password");
+    } else {
+      setUser(data.user);
+      navigate("products");
+      console.log(user);
     }
   };
 
@@ -37,17 +41,17 @@ const AdminSignIn = () => {
           <TextInput
             name="email"
             label="Email"
-            onChange={handleChange}
             rightSection={<IconAt size={14} color="gray" />}
             placeholder="Email"
+            {...form.getInputProps("email")}
           />
 
           <PasswordInput
             name="password"
             mt="md"
             label="Password"
-            onChange={handleChange}
             placeholder="Password"
+            {...form.getInputProps("password")}
           />
 
           <Group position="center" mt="md">

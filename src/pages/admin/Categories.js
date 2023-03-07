@@ -19,17 +19,11 @@ import EditCategories from "../../components/forms/EditCategories";
 import { Context } from "../../context/Context";
 
 const Categories = () => {
-  const [form, setForm] = useState();
   const [editOpened, setEditOpened] = useState(false);
   const { user, setUser, products, setProducts, categories, setCategories } =
     useContext(Context);
-
   const navigate = useNavigate();
   const theme = useMantineTheme();
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleRemoveCategory = (e, id) => {
     setProducts([
@@ -64,7 +58,7 @@ const Categories = () => {
           >
             <Table>
               <tbody>
-                {categories.map((item) => {
+                {categories?.map((item) => {
                   return (
                     <tr key={item.id}>
                       <td>
@@ -111,7 +105,7 @@ const Categories = () => {
           overlayBlur={3}
         >
           {/* Modal content */}
-          <EditCategories onChange={handleChange} />
+          <EditCategories />
         </Modal>
       </div>
     </div>
