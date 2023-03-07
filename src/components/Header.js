@@ -28,16 +28,13 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
   const navigate = useNavigate();
   const theme = useMantineTheme();
   const form = useForm({
-    fullName: "",
-    email: "",
-    password: "",
-    role: "",
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      isAdmin: false,
+    },
   });
-
-  const handleChange = (e) => {
-    form.setValues({ ...form, [e.target.name]: e.target.value });
-    console.log(form.values);
-  };
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -108,7 +105,6 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
         {/* Modal content */}
         <SignIn
           data={data}
-          handleChange={handleChange}
           form={form}
           navigate={navigate}
           setSignInOpened={setSignInOpened}
@@ -132,7 +128,6 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
         {/* Modal content */}
         <SignUp
           data={data}
-          handleChange={handleChange}
           form={form}
           navigate={navigate}
           setSignInOpened={setSignInOpened}
@@ -145,9 +140,17 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
         padding="xl"
         size="xl"
         position="right"
+        zIndex={199}
       >
         {/* Drawer content */}
-        <Cart cart={cart} onRemove={onRemove} onAdd={onAdd} onMinus={onMinus} />
+        <Cart
+          cart={cart}
+          onRemove={onRemove}
+          onAdd={onAdd}
+          onMinus={onMinus}
+          setSignInOpened={setSignInOpened}
+          user={user}
+        />
       </Drawer>
     </header>
   );

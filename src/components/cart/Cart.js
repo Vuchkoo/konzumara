@@ -10,8 +10,9 @@ import {
 import { IconShoppingCart } from "@tabler/icons";
 import React from "react";
 
-const Cart = ({ cart, onRemove, onAdd, onMinus }) => {
+const Cart = ({ cart, onRemove, onAdd, onMinus, setSignInOpened, user }) => {
   // console.log(cart);
+
   return (
     <>
       <Group position="center" pb={10}>
@@ -64,7 +65,20 @@ const Cart = ({ cart, onRemove, onAdd, onMinus }) => {
                   >
                     x
                   </Button>
-                  <h3>${(item.price * item.quantity).toFixed(2)}</h3>
+                  {!item.is_sale ? (
+                    <Text mt={10} mb={10} weight={700}>
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </Text>
+                  ) : (
+                    <>
+                      <Text mt={10} size="sm" strikethrough>
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </Text>
+                      <Text mb={10} weight={700}>
+                        ${(item.sale_price * item.quantity).toFixed(2)}
+                      </Text>
+                    </>
+                  )}
                   <Button onClick={(e) => onMinus(e, item)}>-</Button>
                   <Button onClick={(e) => onAdd(e, item)}>+</Button>
                 </div>
@@ -81,15 +95,27 @@ const Cart = ({ cart, onRemove, onAdd, onMinus }) => {
               $
               {cart
                 .reduce((acc, cart) => {
-                  return cart.quantity * cart.price + acc;
+                  return !cart.is_sale
+                    ? cart.quantity * cart.price + acc
+                    : cart.quantity * cart.sale_price + acc;
                 }, 0)
                 .toFixed(2)}
             </h4>
           </div>
         </div>
-        <Button color="green" fullWidth>
-          ORDER
-        </Button>
+        {!user ? (
+          <Button onClick={() => setSignInOpened(true)} color="green" fullWidth>
+            ORDER
+          </Button>
+        ) : (
+          <Button
+            onClick={() => console.log("ordered")}
+            color="green"
+            fullWidth
+          >
+            ORDER
+          </Button>
+        )}
       </div>
     </>
   );
