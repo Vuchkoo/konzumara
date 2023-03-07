@@ -7,11 +7,31 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconArrowBackUp } from "@tabler/icons";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../config/Supabase";
+import { Context } from "../../context/Context";
 
-const CreateCategory = ({ onChange }) => {
+const CreateCategory = () => {
   const navigate = useNavigate();
+  const form = useForm({
+    initialValues: {
+      name: "",
+    },
+  });
+
+  const { name } = form.values;
+  const { categories, setCategories } = useContext(Context);
+
+  const createNewCategory = async () => {
+    const { error } = await supabase.from("categories").insert({
+      name: name,
+    });
+    navigate("/admin/categories");
+  };
+
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
       <Group>
@@ -23,13 +43,12 @@ const CreateCategory = ({ onChange }) => {
       <Center>
         <h2>Create a new category</h2>
       </Center>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={form.onSubmit(createNewCategory)}>
         <TextInput
-          name="category"
           mt="md"
-          label="Category"
-          onChange={onChange}
-          placeholder="Category"
+          label="Category name"
+          {...form.getInputProps("name")}
+          placeholder="Category name"
         />
 
         <Group position="center" mt="md">
