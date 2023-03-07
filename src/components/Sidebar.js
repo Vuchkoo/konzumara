@@ -1,20 +1,12 @@
 import { Flex, Group, Radio, TextInput } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../context/Context";
 import { useStyles } from "./Styles";
 
 const Sidebar = ({ onEnter, onChange }) => {
   const { classes } = useStyles();
-
-  const data = [
-    { label: "Example 1", value: "example1" },
-    { label: "Example 2", value: "example2" },
-    { label: "Example 3", value: "example3" },
-  ];
-
-  const categories = data.map((item) => (
-    <Radio key={item.label} label={item.label} value={item.value} mb="sm" />
-  ));
+  const { categories } = useContext(Context);
 
   return (
     <div className="sidebar">
@@ -31,7 +23,17 @@ const Sidebar = ({ onEnter, onChange }) => {
       />
       <Radio.Group mt={20} label="Categories" name="categories">
         <Flex direction="column" mb>
-          {categories}
+          {categories?.map((item, index) => {
+            return (
+              <Radio
+                key={index}
+                label={item.name}
+                value={item.id}
+                onClick={() => console.log(item.id)}
+                mb="sm"
+              />
+            );
+          })}
         </Flex>
       </Radio.Group>
     </div>
