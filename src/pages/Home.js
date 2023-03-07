@@ -9,6 +9,7 @@ const Home = () => {
   const [cart, setCart] = useState([]);
   const [search, setSearch] = useState();
   const { user, setUser, products, setProducts } = useContext(Context);
+  const [index, setIndex] = useState(10);
 
   const handleAddToCart = (e, item) => {
     const itExists = cart.some((cart) => {
@@ -65,6 +66,10 @@ const Home = () => {
     }
   };
 
+  const handleLoadMore = () => {
+    setIndex((prevIndex) => prevIndex + 10);
+  };
+
   return (
     <div>
       <Header
@@ -81,18 +86,22 @@ const Home = () => {
         />
         <div className="product-grid">
           <Grid mt={40}>
-            {products?.map((item) => {
+            {products?.slice(0, index).map((item, index) => {
               return (
-                <ProductCard
-                  key={item.name}
-                  item={item}
-                  onAdd={handleAddToCart}
-                />
+                <ProductCard key={index} item={item} onAdd={handleAddToCart} />
               );
             })}
           </Grid>
           <Center mt={50}>
-            <Button color="green">Load more</Button>
+            {index < products?.length ? (
+              <Button color="green" onClick={handleLoadMore}>
+                Load more
+              </Button>
+            ) : (
+              <Button color="green" disabled>
+                Load more
+              </Button>
+            )}
           </Center>
         </div>
       </div>
