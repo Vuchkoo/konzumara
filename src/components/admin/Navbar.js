@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Navbar, Group, Center } from "@mantine/core";
 import {
   IconLogout,
@@ -8,20 +8,24 @@ import {
 } from "@tabler/icons";
 import { useStyles } from "../Styles";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../config/Supabase";
+import { Context } from "../../context/Context";
 
 export const NavbarSimple = () => {
   const [active, setActive] = useState("");
   const { classes, cx } = useStyles();
   const navigate = useNavigate();
+  const { user, setUser } = useContext(Context);
 
   const navLinks = [
     { link: "", label: "Products", icon: IconArticle },
     { link: "", label: "Categories", icon: IconCategory2 },
     { link: "", label: "Orders", icon: IconShoppingCart },
   ];
-
-  const handleSignOut = (e) => {
-    e.preventDefault();
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    setUser();
+    alert("Successfully signed out!");
     navigate("/admin");
   };
 
