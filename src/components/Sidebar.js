@@ -1,4 +1,4 @@
-import { Flex, Group, Radio, TextInput } from "@mantine/core";
+import { Flex, Group, Radio, ScrollArea, TextInput } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
 import React, { useContext } from "react";
 import { Context } from "../context/Context";
@@ -21,21 +21,27 @@ const Sidebar = ({ onEnter, onChange }) => {
         onChange={onChange}
         onKeyDown={onEnter}
       />
-      <Radio.Group mt={20} label="Categories" name="categories">
-        <Flex direction="column" mb>
-          {categories?.map((item, index) => {
-            return (
-              <Radio
-                key={index}
-                label={item.name}
-                value={item.id}
-                onClick={() => console.log(item.id)}
-                mb="sm"
-              />
-            );
-          })}
-        </Flex>
-      </Radio.Group>
+      <ScrollArea
+        style={{ height: 500 }}
+        scrollbarSize={8}
+        scrollHideDelay={1500}
+      >
+        <Radio.Group mt={20} label="Categories" name="categories">
+          <Flex direction="column">
+            {categories?.map((item, index) => {
+              return (
+                <Radio
+                  key={index}
+                  label={item.name}
+                  value={item.id}
+                  onClick={() => console.log(item.id)}
+                  mb="sm"
+                />
+              );
+            })}
+          </Flex>
+        </Radio.Group>
+      </ScrollArea>
     </div>
   );
 };
