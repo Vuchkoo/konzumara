@@ -10,6 +10,7 @@ import Orders from "./pages/admin/Orders";
 import Products from "./pages/admin/Products";
 import { Error } from "./pages/Error";
 import Home from "./pages/Home";
+import ProtectedRoute from "./utilities/ProtectedRoute";
 
 function App() {
   return (
@@ -20,14 +21,46 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="admin" element={<AdminSignIn />} />
-              <Route path="admin/products" element={<Products />} />
-              <Route path="admin/products/create" element={<CreateProduct />} />
-              <Route path="admin/categories" element={<Categories />} />
+              <Route
+                path="admin/products"
+                element={
+                  <ProtectedRoute>
+                    <Products />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="admin/products/create"
+                element={
+                  <ProtectedRoute>
+                    <CreateProduct />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="admin/categories"
+                element={
+                  <ProtectedRoute>
+                    <Categories />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="admin/categories/create"
-                element={<CreateCategory />}
+                element={
+                  <ProtectedRoute>
+                    <CreateCategory />
+                  </ProtectedRoute>
+                }
               />
-              <Route path="admin/orders" element={<Orders />} />
+              <Route
+                path="admin/orders"
+                element={
+                  <ProtectedRoute>
+                    <Orders />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<Error />} />
             </Routes>
           </BrowserRouter>
