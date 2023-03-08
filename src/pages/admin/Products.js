@@ -31,17 +31,6 @@ const Products = () => {
 
   console.log(user);
 
-  const {
-    name,
-    description,
-    price,
-    is_sale,
-    sale_price,
-    image,
-    quantity,
-    category_id,
-  } = products;
-
   const handleRemoveProduct = async (e, id) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
 
@@ -54,28 +43,9 @@ const Products = () => {
     ]);
   };
 
-  const handleEditProduct = async (e, id) => {
-    const { error } = await supabase
-      .from("products")
-      .update({
-        name: name,
-        description: description,
-        price: price,
-        is_sale: is_sale,
-        sale_price: sale_price,
-        image: image,
-        quantity: quantity,
-        category_id: category_id,
-      })
-      .eq("id", id);
-
-    setProducts([
-      ...products.filter((item) => {
-        if (item.id !== id) {
-          return item;
-        }
-      }),
-    ]);
+  const handleEditProduct = async (id) => {
+    navigate(`${id}`);
+    // console.log(id);
   };
 
   const lastProduct = page * productsPerPage;
@@ -169,7 +139,7 @@ const Products = () => {
                         <ActionIcon
                           color="yellow"
                           onClick={() => {
-                            setEditOpened(true);
+                            handleEditProduct(item.id);
                             console.log(item.id);
                           }}
                         >
@@ -198,7 +168,6 @@ const Products = () => {
             onChange={handleChangePage}
           />
         </Center>
-        {/* <EditProduct handleEditProduct={(e) => handleEditProduct(e)} /> */}
       </div>
     </div>
   );

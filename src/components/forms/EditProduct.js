@@ -2,17 +2,81 @@ import {
   ActionIcon,
   Box,
   Button,
+  Center,
+  Checkbox,
   FileInput,
   Group,
+  NativeSelect,
+  NumberInput,
+  Text,
   TextInput,
 } from "@mantine/core";
-import { IconUpload } from "@tabler/icons";
-import React from "react";
+import { IconArrowBackUp } from "@tabler/icons";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../../config/Supabase";
+import { Context } from "../../context/Context";
 
-const EditProduct = ({ onChange }) => {
+const EditProduct = () => {
+  const { categories, productForm } = useContext(Context);
+  const navigate = useNavigate();
+
+  const params = useParams();
+  const getProduct = async (id) => {
+    const { data } = await supabase
+      .from("products")
+      .select()
+      .match({ id: id })
+      .single();
+    console.log(data);
+    productForm?.setValues(data);
+  };
+  useEffect(() => {
+    getProduct(params.id);
+    console.log(params);
+  }, []);
+
+  console.log(productForm);
+
+  const {
+    name,
+    description,
+    price,
+    is_sale,
+    sale_price,
+    image,
+    quantity,
+    category_id,
+  } = productForm.values;
+
+  const SaveEditedProduct = async () => {
+    const { error } = await supabase
+      .from("products")
+      .update({
+        name: name,
+        description: description,
+        price: price,
+        is_sale: is_sale,
+        sale_price: sale_price,
+        image: image,
+        quantity: quantity,
+        category_id: category_id,
+      })
+      .eq("id", params.id);
+  };
+
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
-      <form onSubmit={(e) => e.preventDefault()}>
+      <Group>
+        <ActionIcon color="blue" onClick={() => navigate("/admin/products")}>
+          <IconArrowBackUp />
+        </ActionIcon>
+        <Text>Go back</Text>
+      </Group>
+      <Center>
+        <h2>Edit product</h2>
+      </Center>
+      <form onSubmit={productForm.onSubmit(SaveEditedProduct)}>
         {/* <FileInput
           name="file"
           mt="md"
@@ -20,36 +84,70 @@ const EditProduct = ({ onChange }) => {
           onChange={onChange}
         /> */}
 
-        <TextInput
-          name="image"
+        {/* <TextInput
           mt="md"
           label="Image URL"
-          onChange={onChange}
+          defaultValue={params.image}
+          {...productForm.getInputProps("image")}
           placeholder="Image URL"
-        />
+        /> */}
 
         <TextInput
-          name="name"
           mt="md"
           label="Name"
-          onChange={onChange}
+          value={params.name}
+          {...productForm.getInputProps("name")}
           placeholder="Name"
         />
 
         <TextInput
-          name="category"
           mt="md"
-          label="Category"
-          onChange={onChange}
-          placeholder="Category"
+          label="Description"
+          defaultValue={params.description}
+          {...productForm.getInputProps("description")}
+          placeholder="Description"
         />
 
-        <TextInput
-          name="price"
+        <NativeSelect
+          data={categories?.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
+          mt="md"
+          label="Category"
+          defaultValue={params.name}
+          // onClick={() => console.log(productForm.values)}
+          {...productForm.getInputProps("category_id")}
+        />
+
+        <NumberInput
           mt="md"
           label="Price"
-          onChange={onChange}
+          defaultValue={params.price}
+          {...productForm.getInputProps("price", { type: "number" })}
           placeholder="Price"
+        />
+
+        <NumberInput
+          mt="md"
+          label="Quantity"
+          defaultValue={params.quantity}
+          {...productForm.getInputProps("quantity", { type: "number" })}
+          placeholder="Quantity"
+        />
+
+        <NumberInput
+          mt="md"
+          label="Sale price"
+          defaultValue={params.sale_price}
+          {...productForm.getInputProps("sale_price", { type: "number" })}
+          placeholder="Sale price"
+        />
+
+        <Checkbox
+          label="is Sale"
+          mt="md"
+          // onChange={() => (checked ? setChecked(false) : setChecked(true))}
         />
 
         <Group position="center" mt="md">
