@@ -1,10 +1,10 @@
 import { Flex, Group, Radio, ScrollArea, TextInput } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../context/Context";
 import { useStyles } from "./Styles";
 
-const Sidebar = ({ onEnter, onChange }) => {
+const Sidebar = ({ onChange, onCategory }) => {
   const { classes } = useStyles();
   const { categories } = useContext(Context);
 
@@ -14,12 +14,12 @@ const Sidebar = ({ onEnter, onChange }) => {
         <h1>Konzumara</h1>
       </Group>
       <TextInput
-        label="Search"
         name="search"
+        label="Search"
         placeholder="Search products"
         icon={<IconSearch />}
         onChange={onChange}
-        onKeyDown={onEnter}
+        // onKeyDown={onEnter}
       />
       <ScrollArea
         style={{ height: 500 }}
@@ -34,7 +34,7 @@ const Sidebar = ({ onEnter, onChange }) => {
                   key={index}
                   label={item.name}
                   value={item.id}
-                  onClick={() => console.log(item.id)}
+                  onClick={(e) => onCategory(e, item.id)}
                   mb="sm"
                 />
               );
