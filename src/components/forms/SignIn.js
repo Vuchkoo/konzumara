@@ -1,11 +1,12 @@
 import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { IconAt } from "@tabler/icons";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { supabase } from "../../config/Supabase";
+import { Context } from "../../context/Context";
 
-// const SignIn = ({ data, form, handleChange, setUser, setSignInOpened }) => {
-const SignIn = ({ form, setSignInOpened, setUser }) => {
+const SignIn = ({ form, setSignInOpened }) => {
   const { email, password } = form.values;
+  const { user, setUser } = useContext(Context);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -16,11 +17,13 @@ const SignIn = ({ form, setSignInOpened, setUser }) => {
     if (error) {
       alert("Invalid email or password");
     } else {
-      setUser(data.user);
+      setUser(data.session);
       setSignInOpened(false);
-      console.log(data.user);
+      // console.log(data);
     }
   };
+
+  console.log(user);
 
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">

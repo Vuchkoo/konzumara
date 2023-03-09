@@ -12,30 +12,37 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconCheck, IconEdit, IconSearch, IconTrash } from "@tabler/icons";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
 import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const Products = () => {
-  const {
-    products,
-    setProducts,
-    user,
-    minloadProducts,
-    setMinLoadProducts,
-    maxloadProducts,
-    setMaxLoadProducts,
-    productsCount,
-  } = useContext(Context);
+  const [products, setProducts] = useState([]);
+  const [minLoadProducts, setMinLoadProducts] = useState(0);
+  const [maxLoadProducts, setMaxLoadProducts] = useState(9);
+  const [productsCount, setProductsCount] = useState(null);
+  const { user, loading, setLoading } = useContext(Context);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(10);
+
+  const getProducts = async () => {
+    const { data, count } = await supabase
+      .from("products")
+      .select("*", { count: "exact" })
+      .range(minLoadProducts, maxLoadProducts);
+    setProducts(data);
+    setProductsCount(count);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, [minLoadProducts, maxLoadProducts]);
 
   const handleRemoveProduct = async (e, id) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
-
     setProducts([
       ...products.filter((item) => {
         if (item.id !== id) {
@@ -49,10 +56,6 @@ const Products = () => {
     navigate(`${id}`);
     // console.log(id);
   };
-
-  // const lastProduct = page * productsPerPage;
-  // const firstProduct = lastProduct - productsPerPage;
-  // const currentProducts = products.slice(firstProduct, lastProduct);
 
   const handleChangePage = (prevPage) => {
     if (page > prevPage) {
@@ -70,7 +73,7 @@ const Products = () => {
     }
   };
 
-  // console.log(user);
+  console.log(user);
 
   return (
     <div className="grid">

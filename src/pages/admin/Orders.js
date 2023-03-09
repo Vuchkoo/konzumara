@@ -14,9 +14,6 @@ const Orders = () => {
             placeholder="Search orders"
             icon={<IconSearch />}
           />
-          {/* <Button color="green" mr={50}>
-            Create
-          </Button> */}
         </Flex>
         <div className="orders">
           <h2>Orders</h2>

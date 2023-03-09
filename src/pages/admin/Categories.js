@@ -12,7 +12,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
 import EditCategories from "../../components/forms/EditCategories";
@@ -20,16 +20,27 @@ import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const Categories = () => {
-  const {
-    user,
-    categories,
-    setCategories,
-    setMinLoadCategories,
-    setMaxLoadCategories,
-    categoriesCount,
-  } = useContext(Context);
+  const [categories, setCategories] = useState([]);
+  const [minLoadCategories, setMinLoadCategories] = useState(0);
+  const [maxLoadCategories, setMaxLoadCategories] = useState(9);
+  const [categoriesCount, setCategoriesCount] = useState(null);
+  const { user, loading, setLoading } = useContext(Context);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+
+  const getCategories = async () => {
+    const { data, count } = await supabase
+      .from("categories")
+      .select("*", { count: "exact" })
+      .range(minLoadCategories, maxLoadCategories);
+    setCategories(data);
+    setCategoriesCount(count);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, [minLoadCategories, maxLoadCategories]);
 
   const handleRemoveCategory = async (e, id) => {
     const { error } = await supabase.from("categories").delete().eq("id", id);

@@ -24,7 +24,7 @@ export const NavbarSimple = () => {
   ];
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
-    setUser();
+    setUser(null);
     alert("Successfully signed out!");
     navigate("/admin");
   };

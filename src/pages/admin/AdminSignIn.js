@@ -28,9 +28,9 @@ const AdminSignIn = () => {
     if (error) {
       alert("Invalid email or password");
     } else {
-      setUser(data.user);
+      setUser(data.session);
       navigate("products");
-      console.log(user);
+      // console.log(user);
     }
   };
 

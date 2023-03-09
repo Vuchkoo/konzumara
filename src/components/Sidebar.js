@@ -7,13 +7,36 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { supabase } from "../config/Supabase";
 import { Context } from "../context/Context";
 import { useStyles } from "./Styles";
 
-const Sidebar = ({ onChange, onCategory, loadAll, categoriesCount }) => {
+const Sidebar = ({ onChange, onCategory, loadAll }) => {
   const { classes } = useStyles();
-  const { categories } = useContext(Context);
+  const [categories, setCategories] = useState([]);
+  const [minLoadCategories, setMinLoadCategories] = useState(0);
+  const [maxLoadCategories, setMaxLoadCategories] = useState(9);
+  const [categoriesCount, setCategoriesCount] = useState(null);
+  const { user, loading, setLoading } = useContext(Context);
+
+  const getCategories = async () => {
+    const { data, count } = await supabase
+      .from("categories")
+      .select("*", { count: "exact" })
+      .range(minLoadCategories, maxLoadCategories);
+    setCategories(data);
+    setCategoriesCount(count);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, [minLoadCategories, maxLoadCategories]);
+
+  const handleLoadAllCategories = () => {
+    setMaxLoadCategories((prevIndex) => prevIndex + categoriesCount);
+  };
 
   return (
     <div className="sidebar">
@@ -50,7 +73,7 @@ const Sidebar = ({ onChange, onCategory, loadAll, categoriesCount }) => {
         </Radio.Group>
       </ScrollArea>
       {categories.length < categoriesCount && (
-        <Button color="green" onClick={loadAll}>
+        <Button color="green" onClick={handleLoadAllCategories}>
           Load all
         </Button>
       )}

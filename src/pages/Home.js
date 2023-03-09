@@ -1,26 +1,37 @@
 import Header from "../components/Header";
 import { Grid, Button, Center, ScrollArea } from "@mantine/core";
 import Sidebar from "../components/Sidebar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Context } from "../context/Context";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../config/Supabase";
 
 const Home = () => {
+  const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
+
+  const [minLoadProducts, setMinLoadProducts] = useState(0);
+  const [maxLoadProducts, setMaxLoadProducts] = useState(9);
+  const [productsCount, setProductsCount] = useState(null);
+
+  const { user, loading, setLoading } = useContext(Context);
   const [searchInput, setSearchInput] = useState("");
-  const {
-    products,
-    setProducts,
-    minloadProducts,
-    setMinLoadProducts,
-    maxloadProducts,
-    setMaxLoadProducts,
-    productsCount,
-    setMaxLoadCategories,
-    categoriesCount,
-  } = useContext(Context);
-  const [index, setIndex] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const getProducts = async () => {
+    const { data, count } = await supabase
+      .from("products")
+      .select("*", { count: "exact" })
+      .range(minLoadProducts, maxLoadProducts);
+    setProducts(data);
+    setProductsCount(count);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, [minLoadProducts, maxLoadProducts]);
 
   const handleAddToCart = (e, item) => {
     const itExists = cart.some((cart) => {
@@ -87,10 +98,6 @@ const Home = () => {
     setMaxLoadProducts((prevIndex) => prevIndex + 10);
   };
 
-  const handleLoadAllCategories = () => {
-    setMaxLoadCategories((prevIndex) => prevIndex + categoriesCount);
-  };
-
   // console.log(products);
 
   return (
@@ -107,8 +114,6 @@ const Home = () => {
           // onEnter={onEnter}
           onChange={onSearchChange}
           onCategory={handleCategory}
-          loadAll={handleLoadAllCategories}
-          categoriesCount={categoriesCount}
         />
         <div className="product-grid">
           <Grid mt={40}>

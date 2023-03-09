@@ -6,22 +6,14 @@ import { supabase } from "../config/Supabase";
 export const Context = createContext({ user: null, setUser: () => {} });
 
 const Loading = () => {
-  return <LoadingOverlay visible={true} overlayBlur={2} />;
+  return <LoadingOverlay visible overlayBlur={2} />;
 };
 
 export const DataProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const [minLoadProducts, setMinLoadProducts] = useState(0);
-  const [maxLoadProducts, setMaxLoadProducts] = useState(9);
-  const [productsCount, setProductsCount] = useState(null);
-
-  const [minLoadCategories, setMinLoadCategories] = useState(0);
-  const [maxLoadCategories, setMaxLoadCategories] = useState(9);
-  const [categoriesCount, setCategoriesCount] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const productForm = useForm({
     initialValues: {
@@ -37,52 +29,16 @@ export const DataProvider = ({ children }) => {
   });
 
   const value = {
-    products,
-    setProducts,
-    categories,
-    setCategories,
     loading,
     setLoading,
     productForm,
     user,
     setUser,
-    minLoadProducts,
-    setMinLoadProducts,
-    maxLoadProducts,
-    setMaxLoadProducts,
-    productsCount,
-    minLoadCategories,
-    setMinLoadCategories,
-    maxLoadCategories,
-    setMaxLoadCategories,
-    categoriesCount,
-  };
-
-  const getProducts = async () => {
-    const { data, count } = await supabase
-      .from("products")
-      .select("*", { count: "exact" })
-      .range(minLoadProducts, maxLoadProducts);
-    setProducts(data);
-    setProductsCount(count);
-    setLoading(false);
-  };
-
-  const getCategories = async () => {
-    setLoading(true);
-    const { data, count } = await supabase
-      .from("categories")
-      .select("*", { count: "exact" })
-      .range(minLoadCategories, maxLoadCategories);
-    setCategories(data);
-    setCategoriesCount(count);
-    setLoading(false);
   };
 
   const getSession = async () => {
     supabase.auth.getSession().then(({ data }) => {
-      // console.log(data);
-
+      console.log(data, "nesto");
       if (data && data.session) {
         setUser(data.session.user);
         setLoading(false);
@@ -90,33 +46,35 @@ export const DataProvider = ({ children }) => {
         setLoading(false);
       }
     });
+  };
+  const onAuthStateChange = async () => {
     supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event.session);
+      console.log(event, session);
       if (event === "SIGNED_IN") {
-        setUser(session);
+        setUser(session.user);
         setLoading(false);
       }
       if (event === "SIGNED_OUT") {
         setUser(null);
+        setLoading(false);
       }
     });
   };
 
   useEffect(() => {
-    setLoading(true);
-    getProducts();
-    getCategories();
+    onAuthStateChange();
     getSession();
-  }, [minLoadProducts, maxLoadProducts, minLoadCategories, maxLoadCategories]);
+  }, []);
+
+  console.log(loading);
 
   return (
     <Context.Provider value={value}>
       {!loading ? children : <Loading />}
+      {/* {!loading && children} */}
     </Context.Provider>
   );
 };
-
-// const AuthContext = createContext({ user: null, setUser: () => {} });
 
 export const useAuth = () => {
   const auth = useContext(Context);

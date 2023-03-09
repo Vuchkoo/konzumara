@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ActionIcon,
   Avatar,
@@ -17,13 +17,13 @@ import SignIn from "./forms/SignIn";
 import SignUp from "./forms/SignUp";
 import { useForm } from "@mantine/form";
 import { supabase } from "../config/Supabase";
+import { Context } from "../context/Context";
 
 const Header = ({ cart, onRemove, onAdd, onMinus }) => {
   const [cartOpened, setCartOpened] = useState(false);
   const [signInOpened, setSignInOpened] = useState(false);
   const [signUpOpened, setSignUpOpened] = useState(false);
-  const [user, setUser] = useState();
-  const [data, setData] = useState();
+  const { user, setUser } = useContext(Context);
 
   const navigate = useNavigate();
   const theme = useMantineTheme();
@@ -38,7 +38,7 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
-    setUser();
+    setUser(null);
     alert("Successfully signed out!");
   };
 
@@ -104,12 +104,9 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
       >
         {/* Modal content */}
         <SignIn
-          data={data}
           form={form}
           navigate={navigate}
           setSignInOpened={setSignInOpened}
-          user={user}
-          setUser={setUser}
         />
       </Modal>
       <Modal
@@ -127,7 +124,6 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
       >
         {/* Modal content */}
         <SignUp
-          data={data}
           form={form}
           navigate={navigate}
           setSignInOpened={setSignInOpened}
@@ -149,7 +145,6 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
           onAdd={onAdd}
           onMinus={onMinus}
           setSignInOpened={setSignInOpened}
-          user={user}
         />
       </Drawer>
     </header>

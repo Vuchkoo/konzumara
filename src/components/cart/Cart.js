@@ -36,7 +36,7 @@ const Cart = ({ cart, onRemove, onAdd, onMinus, setSignInOpened, user }) => {
         <div className="cart-main">
           {cart.map((item) => {
             return (
-              <div key={item.name} className="cart-card">
+              <div key={item.id} className="cart-card">
                 <div className="cart-item">
                   <Image
                     src={item.image}

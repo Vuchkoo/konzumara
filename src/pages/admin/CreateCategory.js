@@ -16,14 +16,13 @@ import { Context } from "../../context/Context";
 
 const CreateCategory = () => {
   const navigate = useNavigate();
+  const { categories, setCategories } = useContext(Context);
   const form = useForm({
     initialValues: {
       name: "",
     },
   });
-
   const { name } = form.values;
-  const { categories, setCategories } = useContext(Context);
 
   const createNewCategory = async () => {
     const { error } = await supabase.from("categories").insert({
