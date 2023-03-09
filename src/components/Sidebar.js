@@ -1,10 +1,17 @@
-import { Flex, Group, Radio, ScrollArea, TextInput } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Group,
+  Radio,
+  ScrollArea,
+  TextInput,
+} from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
 import React, { useContext, useState } from "react";
 import { Context } from "../context/Context";
 import { useStyles } from "./Styles";
 
-const Sidebar = ({ onChange, onCategory }) => {
+const Sidebar = ({ onChange, onCategory, loadAll, categoriesCount }) => {
   const { classes } = useStyles();
   const { categories } = useContext(Context);
 
@@ -42,6 +49,11 @@ const Sidebar = ({ onChange, onCategory }) => {
           </Flex>
         </Radio.Group>
       </ScrollArea>
+      {categories.length < categoriesCount && (
+        <Button color="green" onClick={loadAll}>
+          Load all
+        </Button>
+      )}
     </div>
   );
 };

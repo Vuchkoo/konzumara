@@ -19,6 +19,10 @@ export const DataProvider = ({ children }) => {
   const [maxLoadProducts, setMaxLoadProducts] = useState(9);
   const [productsCount, setProductsCount] = useState(null);
 
+  const [minLoadCategories, setMinLoadCategories] = useState(0);
+  const [maxLoadCategories, setMaxLoadCategories] = useState(9);
+  const [categoriesCount, setCategoriesCount] = useState(null);
+
   const productForm = useForm({
     initialValues: {
       name: "",
@@ -47,6 +51,11 @@ export const DataProvider = ({ children }) => {
     maxLoadProducts,
     setMaxLoadProducts,
     productsCount,
+    minLoadCategories,
+    setMinLoadCategories,
+    maxLoadCategories,
+    setMaxLoadCategories,
+    categoriesCount,
   };
 
   const getProducts = async () => {
@@ -61,8 +70,12 @@ export const DataProvider = ({ children }) => {
 
   const getCategories = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from("categories").select();
+    const { data, count } = await supabase
+      .from("categories")
+      .select("*", { count: "exact" })
+      .range(minLoadCategories, maxLoadCategories);
     setCategories(data);
+    setCategoriesCount(count);
     setLoading(false);
   };
 
@@ -94,7 +107,7 @@ export const DataProvider = ({ children }) => {
     getProducts();
     getCategories();
     getSession();
-  }, [minLoadProducts, maxLoadProducts]);
+  }, [minLoadProducts, maxLoadProducts, minLoadCategories, maxLoadCategories]);
 
   return (
     <Context.Provider value={value}>

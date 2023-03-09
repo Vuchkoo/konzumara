@@ -16,6 +16,8 @@ const Home = () => {
     maxloadProducts,
     setMaxLoadProducts,
     productsCount,
+    setMaxLoadCategories,
+    categoriesCount,
   } = useContext(Context);
   const [index, setIndex] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -85,6 +87,10 @@ const Home = () => {
     setMaxLoadProducts((prevIndex) => prevIndex + 10);
   };
 
+  const handleLoadAllCategories = () => {
+    setMaxLoadCategories((prevIndex) => prevIndex + categoriesCount);
+  };
+
   // console.log(products);
 
   return (
@@ -101,6 +107,8 @@ const Home = () => {
           // onEnter={onEnter}
           onChange={onSearchChange}
           onCategory={handleCategory}
+          loadAll={handleLoadAllCategories}
+          categoriesCount={categoriesCount}
         />
         <div className="product-grid">
           <Grid mt={40}>
@@ -125,12 +133,8 @@ const Home = () => {
               })}
           </Grid>
           <Center mt={50}>
-            {products.length < productsCount ? (
+            {products.length < productsCount && (
               <Button color="green" onClick={handleLoadMore}>
-                Load more
-              </Button>
-            ) : (
-              <Button color="green" disabled>
                 Load more
               </Button>
             )}

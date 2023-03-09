@@ -16,23 +16,51 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
 import EditCategories from "../../components/forms/EditCategories";
+import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const Categories = () => {
-  const [editOpened, setEditOpened] = useState(false);
-  const { user, setUser, products, setProducts, categories, setCategories } =
-    useContext(Context);
+  const {
+    user,
+    categories,
+    setCategories,
+    setMinLoadCategories,
+    setMaxLoadCategories,
+    categoriesCount,
+  } = useContext(Context);
   const navigate = useNavigate();
-  const theme = useMantineTheme();
+  const [page, setPage] = useState(1);
 
-  const handleRemoveCategory = (e, id) => {
-    setProducts([
-      ...products.filter((item) => {
+  const handleRemoveCategory = async (e, id) => {
+    const { error } = await supabase.from("categories").delete().eq("id", id);
+    setCategories([
+      ...categories.filter((item) => {
         if (item.id !== id) {
           return item;
         }
       }),
     ]);
+  };
+
+  const handleEditCategory = async (id) => {
+    navigate(`${id}`);
+    // console.log(id);
+  };
+
+  const handleChangePage = (prevPage) => {
+    if (page > prevPage) {
+      return (
+        setPage((prevPage) => prevPage - 1),
+        setMinLoadCategories((prevIndex) => prevIndex - 10),
+        setMaxLoadCategories((prevIndex) => prevIndex - 10)
+      );
+    } else {
+      return (
+        setPage((prevPage) => prevPage + 1),
+        setMinLoadCategories((prevIndex) => prevIndex + 10),
+        setMaxLoadCategories((prevIndex) => prevIndex + 10)
+      );
+    }
   };
 
   return (
@@ -68,7 +96,10 @@ const Categories = () => {
                         <Flex>
                           <ActionIcon
                             color="yellow"
-                            onClick={() => setEditOpened(true)}
+                            onClick={() => {
+                              handleEditCategory(item.id);
+                              console.log(item.id);
+                            }}
                           >
                             <IconEdit />
                           </ActionIcon>
@@ -87,11 +118,15 @@ const Categories = () => {
               </tbody>
             </Table>
           </ScrollArea>
-          <Center>
-            <Pagination total={10} />
+          <Center mt={40}>
+            <Pagination
+              total={Math.floor(categoriesCount / 10 + 1)}
+              page={page}
+              onChange={handleChangePage}
+            />
           </Center>{" "}
         </div>
-        <Modal
+        {/* <Modal
           opened={editOpened}
           onClose={() => setEditOpened(false)}
           title="Edit category"
@@ -104,9 +139,8 @@ const Categories = () => {
           overlayOpacity={0.55}
           overlayBlur={3}
         >
-          {/* Modal content */}
           <EditCategories />
-        </Modal>
+        </Modal> */}
       </div>
     </div>
   );
