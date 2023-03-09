@@ -8,7 +8,15 @@ import { Context } from "../context/Context";
 const Home = () => {
   const [cart, setCart] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const { products, setProducts, loading, setLoading } = useContext(Context);
+  const {
+    products,
+    setProducts,
+    minloadProducts,
+    setMinLoadProducts,
+    maxloadProducts,
+    setMaxLoadProducts,
+    productsCount,
+  } = useContext(Context);
   const [index, setIndex] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -74,8 +82,10 @@ const Home = () => {
   };
 
   const handleLoadMore = () => {
-    setIndex((prevIndex) => prevIndex + 10);
+    setMaxLoadProducts((prevIndex) => prevIndex + 10);
   };
+
+  // console.log(products);
 
   return (
     <div>
@@ -104,7 +114,6 @@ const Home = () => {
                 }
                 return item;
               })
-              ?.slice(0, index)
               ?.map((item, index) => {
                 return (
                   <ProductCard
@@ -116,7 +125,7 @@ const Home = () => {
               })}
           </Grid>
           <Center mt={50}>
-            {index < products?.length ? (
+            {products.length < productsCount ? (
               <Button color="green" onClick={handleLoadMore}>
                 Load more
               </Button>

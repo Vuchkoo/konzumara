@@ -10,26 +10,28 @@ import {
   Table,
   Text,
   TextInput,
-  useMantineTheme,
 } from "@mantine/core";
 import { IconCheck, IconEdit, IconSearch, IconTrash } from "@tabler/icons";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
-import EditProduct from "../../components/forms/EditProduct";
 import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const Products = () => {
-  const [editOpened, setEditOpened] = useState(false);
-  const { products, setProducts, categories, setCategories, user } =
-    useContext(Context);
+  const {
+    products,
+    setProducts,
+    user,
+    minloadProducts,
+    setMinLoadProducts,
+    maxloadProducts,
+    setMaxLoadProducts,
+    productsCount,
+  } = useContext(Context);
   const navigate = useNavigate();
-  const theme = useMantineTheme();
   const [page, setPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(8);
-
-  console.log(user);
+  const [productsPerPage, setProductsPerPage] = useState(10);
 
   const handleRemoveProduct = async (e, id) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
@@ -48,14 +50,24 @@ const Products = () => {
     // console.log(id);
   };
 
-  const lastProduct = page * productsPerPage;
-  const firstProduct = lastProduct - productsPerPage;
-  const currentProducts = products.slice(firstProduct, lastProduct);
+  // const lastProduct = page * productsPerPage;
+  // const firstProduct = lastProduct - productsPerPage;
+  // const currentProducts = products.slice(firstProduct, lastProduct);
 
   const handleChangePage = (prevPage) => {
-    page > prevPage
-      ? setPage((prevPage) => prevPage - 1)
-      : setPage((prevPage) => prevPage + 1);
+    if (page > prevPage) {
+      return (
+        setPage((prevPage) => prevPage - 1),
+        setMinLoadProducts((prevIndex) => prevIndex - 10),
+        setMaxLoadProducts((prevIndex) => prevIndex - 10)
+      );
+    } else {
+      return (
+        setPage((prevPage) => prevPage + 1),
+        setMinLoadProducts((prevIndex) => prevIndex + 10),
+        setMaxLoadProducts((prevIndex) => prevIndex + 10)
+      );
+    }
   };
 
   // console.log(user);
@@ -64,7 +76,7 @@ const Products = () => {
     <div className="grid">
       <NavbarSimple />
       <div className="wrapper">
-        <Flex justify="space-between" p={40}>
+        <Flex justify="space-between" p={20}>
           <TextInput
             ml={50}
             placeholder="Search products"
@@ -95,7 +107,7 @@ const Products = () => {
               </tr>
             </thead>
             <tbody>
-              {currentProducts?.map((item) => {
+              {products?.map((item) => {
                 return (
                   <tr key={item.id}>
                     <td>
@@ -163,7 +175,7 @@ const Products = () => {
         </div>
         <Center mt={40}>
           <Pagination
-            total={Math.round(products.length / 6)}
+            total={Math.floor(productsCount / 10 + 1)}
             page={page}
             onChange={handleChangePage}
           />
