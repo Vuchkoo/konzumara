@@ -1,6 +1,8 @@
 import { MantineProvider } from "@mantine/core";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import EditCategories from "./components/forms/EditCategories";
+import EditProduct from "./components/forms/EditProduct";
 import { DataProvider } from "./context/Context";
 import AdminSignIn from "./pages/admin/AdminSignIn";
 import Categories from "./pages/admin/Categories";
@@ -30,6 +32,14 @@ function App() {
                 }
               />
               <Route
+                path="admin/products/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditProduct />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="admin/products/create"
                 element={
                   <ProtectedRoute>
@@ -46,6 +56,14 @@ function App() {
                 }
               />
               <Route
+                path="admin/categories/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditCategories />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="admin/categories/create"
                 element={
                   <ProtectedRoute>
@@ -53,14 +71,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="admin/orders"
-                element={
-                  <ProtectedRoute>
-                    <Orders />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="admin/orders" element={<Orders />} />
               <Route path="*" element={<Error />} />
             </Routes>
           </BrowserRouter>

@@ -5,8 +5,8 @@ import { useAuth } from "../context/Context";
 const ProtectedRoute = ({ children }) => {
   const { user, setUser } = useAuth();
 
-  if (!user.role === "admin") {
-    return <Navigate to="/" replace />;
+  if (!user) {
+    return <Navigate to="/admin" replace />;
   }
   return children;
 };

@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../config/Supabase";
 
-export const Context = createContext(null);
+export const Context = createContext({ user: null, setUser: () => {} });
 
 const Loading = () => {
   return <LoadingOverlay visible={true} overlayBlur={2} />;
@@ -118,7 +118,7 @@ export const DataProvider = ({ children }) => {
 
 // const AuthContext = createContext({ user: null, setUser: () => {} });
 
-// export const useAuth = () => {
-//   const auth = useContext(AuthContext);
-//   return auth;
-// };
+export const useAuth = () => {
+  const auth = useContext(Context);
+  return auth;
+};
