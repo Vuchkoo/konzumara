@@ -126,7 +126,7 @@ const Products = () => {
                       <Text>{item.name}</Text>
                     </td>
                     <td>
-                      <Text>{item.description}</Text>
+                      <Text className="product-text">{item.description}</Text>
                     </td>
                     <td>
                       <Text>${item.price.toFixed(2)}</Text>

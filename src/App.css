@@ -51,7 +51,7 @@
 }
 
 /* Cart Header */
-.mantine-w29q45 {
+.mantine-Drawer-header {
   margin-bottom: 0;
 }
 
@@ -59,4 +59,13 @@
 .categories,
 .orders {
   padding-left: 20px;
+}
+
+.product {
+  width: 185px;
+}
+
+.product-text {
+  width: 150px;
+  overflow: hidden;
 }
