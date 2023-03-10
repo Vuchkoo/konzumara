@@ -15,7 +15,6 @@ import { IconEdit, IconSearch, IconTrash } from "@tabler/icons";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarSimple } from "../../components/admin/Navbar";
-import EditCategories from "../../components/forms/EditCategories";
 import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
@@ -24,7 +23,7 @@ const Categories = () => {
   const [minLoadCategories, setMinLoadCategories] = useState(0);
   const [maxLoadCategories, setMaxLoadCategories] = useState(9);
   const [categoriesCount, setCategoriesCount] = useState(null);
-  const { user, loading, setLoading } = useContext(Context);
+  const { setLoading } = useContext(Context);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
 
@@ -55,7 +54,6 @@ const Categories = () => {
 
   const handleEditCategory = async (id) => {
     navigate(`${id}`);
-    // console.log(id);
   };
 
   const handleChangePage = (prevPage) => {

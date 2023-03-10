@@ -5,7 +5,6 @@ import { useContext, useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Context } from "../context/Context";
 import { supabase } from "../config/Supabase";
-import { useLocalStorage } from "@mantine/hooks";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -120,15 +119,24 @@ const Home = () => {
 
   const onSearchChange = (e) => {
     setSearchInput(e.target.value.toLowerCase());
+    handleSearch();
     // console.log(searchInput);
     // return searchInput.toLowerCase();
   };
 
   // const onEnter = (e) => {
   //   if (e.key === "Enter") {
-  //     console.log(searchInput);
+  //     handleSearch();
   //   }
   // };
+
+  const handleSearch = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select()
+      .like("name", searchInput);
+    console.log(data);
+  };
 
   const handleCategory = (e, category) => {
     setSelectedCategory(category);
@@ -142,8 +150,6 @@ const Home = () => {
   const handleLoadAllCategories = () => {
     setMaxLoadCategories((prevIndex) => prevIndex + categoriesCount);
   };
-
-  // console.log(products);
 
   return (
     <div>

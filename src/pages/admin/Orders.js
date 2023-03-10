@@ -23,7 +23,7 @@ const Orders = () => {
   const [minLoadOrders, setMinLoadOrders] = useState(0);
   const [maxLoadOrders, setMaxLoadOrders] = useState(9);
   const [ordersCount, setOrdersCount] = useState(null);
-  const { user, loading, setLoading } = useContext(Context);
+  const { setLoading } = useContext(Context);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
 
@@ -67,6 +67,7 @@ const Orders = () => {
       );
     }
   };
+
   return (
     <div className="grid">
       <NavbarSimple />

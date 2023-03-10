@@ -19,7 +19,6 @@ const SignIn = ({ form, setSignInOpened }) => {
     } else {
       setUser(data.session);
       setSignInOpened(false);
-      // console.log(data);
     }
   };
 

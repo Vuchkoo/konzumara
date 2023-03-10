@@ -4,13 +4,14 @@ import {
   Button,
   Center,
   Checkbox,
+  FileInput,
   Group,
-  NativeSelect,
   NumberInput,
   Select,
   Text,
   TextInput,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconArrowBackUp } from "@tabler/icons";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,17 +21,19 @@ import { Context } from "../../context/Context";
 const CreateProduct = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-  const { user, loading, setLoading, productForm } = useContext(Context);
-  const {
-    name,
-    description,
-    price,
-    is_sale,
-    sale_price,
-    image,
-    quantity,
-    category_id,
-  } = productForm.values;
+  const { user, setLoading } = useContext(Context);
+  const productForm = useForm({
+    initialValues: {
+      name: "",
+      description: "",
+      price: "",
+      is_sale: "",
+      sale_price: "",
+      image: "",
+      quantity: "",
+      category_id: "",
+    },
+  });
 
   const getCategories = async () => {
     const { data, error } = await supabase.from("categories").select();
@@ -43,17 +46,9 @@ const CreateProduct = () => {
   }, []);
 
   const createNewProduct = async () => {
-    const { error } = await supabase.from("products").insert({
-      name: name,
-      description: description,
-      price: price,
-      is_sale: is_sale,
-      sale_price: sale_price,
-      image: image,
-      quantity: quantity,
-      category_id: category_id,
-      user_id: user.id,
-    });
+    const { error } = await supabase
+      .from("products")
+      .insert(productForm.values);
     navigate("/admin/products");
   };
 
@@ -61,6 +56,8 @@ const CreateProduct = () => {
     value: item.id,
     label: item.name,
   }));
+
+  console.log(productForm.values);
 
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
@@ -74,12 +71,7 @@ const CreateProduct = () => {
         <h2>Create a new product</h2>
       </Center>
       <form onSubmit={productForm.onSubmit(createNewProduct)}>
-        <TextInput
-          mt="md"
-          label="Image URL"
-          {...productForm.getInputProps("image")}
-          placeholder="Image URL"
-        />
+        <FileInput placeholder="Pick file" label="Image" />
 
         <TextInput
           mt="md"

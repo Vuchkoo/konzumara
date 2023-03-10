@@ -1,11 +1,4 @@
-import {
-  createStyles,
-  Title,
-  Text,
-  Button,
-  Container,
-  Group,
-} from "@mantine/core";
+import { Title, Text, Button, Container, Group } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "../components/Styles";
 

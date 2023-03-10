@@ -24,7 +24,6 @@ const SignUp = ({ form, setSignInOpened, setSignUpOpened, navigate }) => {
         },
       },
     });
-    // console.log(data);
     if (isAdmin) {
       navigate("/admin");
     } else {

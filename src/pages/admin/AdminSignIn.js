@@ -15,7 +15,7 @@ import { Context } from "../../context/Context";
 
 const AdminSignIn = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(Context);
+  const { setUser } = useContext(Context);
   const form = useForm({ initialValues: { email: "", password: "" } });
   const { email, password } = form.values;
 
@@ -30,7 +30,6 @@ const AdminSignIn = () => {
     } else {
       setUser(data.session);
       navigate("products");
-      // console.log(user);
     }
   };
 

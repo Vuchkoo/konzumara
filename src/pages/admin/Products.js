@@ -4,9 +4,7 @@ import {
   Center,
   Flex,
   Image,
-  Modal,
   Pagination,
-  ScrollArea,
   Table,
   Text,
   TextInput,
@@ -23,7 +21,7 @@ const Products = () => {
   const [minLoadProducts, setMinLoadProducts] = useState(0);
   const [maxLoadProducts, setMaxLoadProducts] = useState(9);
   const [productsCount, setProductsCount] = useState(null);
-  const { user, loading, setLoading } = useContext(Context);
+  const { user, setLoading } = useContext(Context);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
 
@@ -54,7 +52,6 @@ const Products = () => {
 
   const handleEditProduct = async (id) => {
     navigate(`${id}`);
-    // console.log(id);
   };
 
   const handleChangePage = (prevPage) => {
@@ -91,11 +88,6 @@ const Products = () => {
         </Flex>
         <div className="products">
           <h2>Products</h2>
-          {/* <ScrollArea
-            style={{ height: 500 }}
-            scrollbarSize={8}
-            scrollHideDelay={1500}
-          > */}
           <Table>
             <thead>
               <tr>
@@ -174,7 +166,6 @@ const Products = () => {
               })}
             </tbody>
           </Table>
-          {/* </ScrollArea> */}
         </div>
         <Center mt={40}>
           <Pagination
