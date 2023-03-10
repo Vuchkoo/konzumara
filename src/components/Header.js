@@ -42,6 +42,19 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
     alert("Successfully signed out!");
   };
 
+  const handleOrderSubmit = async () => {
+    const { error } = await supabase
+      .from("orders")
+      .insert({ user_id: user.id, total: totalPrice });
+    console.log(user.id, totalPrice);
+  };
+
+  const totalPrice = cart.reduce((acc, cart) => {
+    return !cart.is_sale
+      ? cart.quantity * cart.price + acc
+      : cart.quantity * cart.sale_price + acc;
+  }, 0);
+
   return (
     <header>
       {!user ? (
@@ -145,6 +158,8 @@ const Header = ({ cart, onRemove, onAdd, onMinus }) => {
           onAdd={onAdd}
           onMinus={onMinus}
           setSignInOpened={setSignInOpened}
+          totalPrice={totalPrice}
+          onOrderSubmit={handleOrderSubmit}
         />
       </Drawer>
     </header>

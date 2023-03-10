@@ -8,10 +8,19 @@ import {
   Text,
 } from "@mantine/core";
 import { IconShoppingCart } from "@tabler/icons";
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../../context/Context";
 
-const Cart = ({ cart, onRemove, onAdd, onMinus, setSignInOpened, user }) => {
-  // console.log(cart);
+const Cart = ({
+  cart,
+  onRemove,
+  onAdd,
+  onMinus,
+  setSignInOpened,
+  totalPrice,
+  onOrderSubmit,
+}) => {
+  const { user } = useContext(Context);
 
   return (
     <>
@@ -91,16 +100,7 @@ const Cart = ({ cart, onRemove, onAdd, onMinus, setSignInOpened, user }) => {
         <div className="price">
           <h3>SUBTOTAL</h3>
           <div>
-            <h4>
-              $
-              {cart
-                .reduce((acc, cart) => {
-                  return !cart.is_sale
-                    ? cart.quantity * cart.price + acc
-                    : cart.quantity * cart.sale_price + acc;
-                }, 0)
-                .toFixed(2)}
-            </h4>
+            <h4>${totalPrice.toFixed(2)}</h4>
           </div>
         </div>
         {!user ? (
@@ -108,11 +108,7 @@ const Cart = ({ cart, onRemove, onAdd, onMinus, setSignInOpened, user }) => {
             ORDER
           </Button>
         ) : (
-          <Button
-            onClick={() => console.log("ordered")}
-            color="green"
-            fullWidth
-          >
+          <Button onClick={onOrderSubmit} color="green" fullWidth>
             ORDER
           </Button>
         )}
