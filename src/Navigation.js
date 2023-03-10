@@ -30,7 +30,7 @@ export const Navigation = () => {
       <Route
         path="admin/products/:id"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute user={user}>
             <EditProduct />
           </ProtectedRoute>
         }
@@ -38,7 +38,7 @@ export const Navigation = () => {
       <Route
         path="admin/products/create"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute user={user}>
             <CreateProduct />
           </ProtectedRoute>
         }
@@ -54,7 +54,7 @@ export const Navigation = () => {
       <Route
         path="admin/categories/:id"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute user={user}>
             <EditCategories />
           </ProtectedRoute>
         }
@@ -62,7 +62,7 @@ export const Navigation = () => {
       <Route
         path="admin/categories/create"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute user={user}>
             <CreateCategory />
           </ProtectedRoute>
         }
