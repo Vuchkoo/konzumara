@@ -9,14 +9,14 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconArrowBackUp } from "@tabler/icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const CreateCategory = () => {
   const navigate = useNavigate();
-  const { categories, setCategories } = useContext(Context);
+  const { user } = useContext(Context);
   const form = useForm({
     initialValues: {
       name: "",
@@ -27,6 +27,7 @@ const CreateCategory = () => {
   const createNewCategory = async () => {
     const { error } = await supabase.from("categories").insert({
       name: name,
+      user_id: user.id,
     });
     navigate("/admin/categories");
   };

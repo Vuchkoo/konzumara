@@ -137,21 +137,6 @@ const Categories = () => {
             />
           </Center>{" "}
         </div>
-        {/* <Modal
-          opened={editOpened}
-          onClose={() => setEditOpened(false)}
-          title="Edit category"
-          centered
-          overlayColor={
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[9]
-              : theme.colors.gray[2]
-          }
-          overlayOpacity={0.55}
-          overlayBlur={3}
-        >
-          <EditCategories />
-        </Modal> */}
       </div>
     </div>
   );

@@ -1,21 +1,26 @@
 import Header from "../components/Header";
-import { Grid, Button, Center, ScrollArea } from "@mantine/core";
+import { Grid, Button, Center } from "@mantine/core";
 import Sidebar from "../components/Sidebar";
 import { useContext, useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { Context } from "../context/Context";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../config/Supabase";
+import { useLocalStorage } from "@mantine/hooks";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [cart, setCart] = useState([]);
 
   const [minLoadProducts, setMinLoadProducts] = useState(0);
   const [maxLoadProducts, setMaxLoadProducts] = useState(9);
   const [productsCount, setProductsCount] = useState(null);
 
-  const { user, loading, setLoading } = useContext(Context);
+  const [minLoadCategories, setMinLoadCategories] = useState(0);
+  const [maxLoadCategories, setMaxLoadCategories] = useState(9);
+  const [categoriesCount, setCategoriesCount] = useState(null);
+
+  const { setLoading } = useContext(Context);
   const [searchInput, setSearchInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -29,9 +34,42 @@ const Home = () => {
     setLoading(false);
   };
 
+  // const [items, setItems] = useState([]);
+
+  // const getCart = () => {
+  //   const items = JSON.parse(localStorage.getItem("cart"));
+  //   if (items) {
+  //     setItems(items);
+  //     console.log(items);
+  //   }
+  // };
+  // console.log(savedCart);
+
+  const getCategories = async () => {
+    const { data, count } = await supabase
+      .from("categories")
+      .select("*", { count: "exact" })
+      .range(minLoadCategories, maxLoadCategories);
+    setCategories(data);
+    setCategoriesCount(count);
+    setLoading(false);
+  };
+
   useEffect(() => {
     getProducts();
-  }, [minLoadProducts, maxLoadProducts]);
+    getCategories();
+  }, [minLoadProducts, maxLoadProducts, minLoadCategories, maxLoadCategories]);
+
+  // useEffect(() => {
+  //   getCart();
+  // }, []);
+
+  // console.log(items);
+
+  // useEffect(() => {
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  //   getCart();
+  // }, [cart]);
 
   const handleAddToCart = (e, item) => {
     const itExists = cart.some((cart) => {
@@ -41,12 +79,15 @@ const Home = () => {
       setCart(
         cart?.map((cart) => {
           if (cart.id === item.id) {
+            localStorage.setItem(`cart${cart.id}`, JSON.stringify(cart));
             return { ...cart, quantity: cart.quantity + 1 };
           }
           return cart;
         })
       );
     } else {
+      localStorage.setItem(`cart${item.id}`, JSON.stringify(item));
+      console.log(cart);
       return setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
@@ -98,6 +139,10 @@ const Home = () => {
     setMaxLoadProducts((prevIndex) => prevIndex + 10);
   };
 
+  const handleLoadAllCategories = () => {
+    setMaxLoadCategories((prevIndex) => prevIndex + categoriesCount);
+  };
+
   // console.log(products);
 
   return (
@@ -114,6 +159,9 @@ const Home = () => {
           // onEnter={onEnter}
           onChange={onSearchChange}
           onCategory={handleCategory}
+          categories={categories}
+          categoriesCount={categoriesCount}
+          loadAll={handleLoadAllCategories}
         />
         <div className="product-grid">
           <Grid mt={40}>

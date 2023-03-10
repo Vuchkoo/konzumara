@@ -7,18 +7,20 @@ import {
   Group,
   NativeSelect,
   NumberInput,
+  Select,
   Text,
   TextInput,
 } from "@mantine/core";
 import { IconArrowBackUp } from "@tabler/icons";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const CreateProduct = () => {
   const navigate = useNavigate();
-  const { categories, productForm } = useContext(Context);
+  const [categories, setCategories] = useState([]);
+  const { user, loading, setLoading, productForm } = useContext(Context);
   const {
     name,
     description,
@@ -30,6 +32,16 @@ const CreateProduct = () => {
     category_id,
   } = productForm.values;
 
+  const getCategories = async () => {
+    const { data, error } = await supabase.from("categories").select();
+    setCategories(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
   const createNewProduct = async () => {
     const { error } = await supabase.from("products").insert({
       name: name,
@@ -40,9 +52,15 @@ const CreateProduct = () => {
       image: image,
       quantity: quantity,
       category_id: category_id,
+      user_id: user.id,
     });
     navigate("/admin/products");
   };
+
+  const selectCategory = categories?.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
 
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
@@ -77,13 +95,11 @@ const CreateProduct = () => {
           placeholder="Description"
         />
 
-        <NativeSelect
-          data={categories?.map((item) => ({
-            value: item.id,
-            label: item.name,
-          }))}
-          mt="md"
+        <Select
           label="Category"
+          placeholder="Choose a category"
+          data={selectCategory}
+          mt="md"
           onClick={() => console.log(productForm.values)}
           {...productForm.getInputProps("category_id")}
         />

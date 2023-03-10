@@ -18,7 +18,9 @@ import { supabase } from "../../config/Supabase";
 import { Context } from "../../context/Context";
 
 const EditProduct = () => {
-  const { categories, productForm } = useContext(Context);
+  const { productForm, setLoading } = useContext(Context);
+  const [categories, setCategories] = useState([]);
+
   const navigate = useNavigate();
 
   const params = useParams();
@@ -31,9 +33,20 @@ const EditProduct = () => {
     console.log(data);
     productForm?.setValues(data);
   };
+
   useEffect(() => {
     getProduct(params.id);
     console.log(params);
+  }, []);
+
+  const getCategories = async () => {
+    const { data, error } = await supabase.from("categories").select();
+    setCategories(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getCategories();
   }, []);
 
   console.log(productForm);
@@ -63,6 +76,7 @@ const EditProduct = () => {
         category_id: category_id,
       })
       .eq("id", params.id);
+    navigate("/admin/products");
   };
 
   return (

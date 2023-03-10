@@ -10,8 +10,6 @@ const Loading = () => {
 };
 
 export const DataProvider = ({ children }) => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
